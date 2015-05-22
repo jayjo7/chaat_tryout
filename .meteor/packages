@@ -1,0 +1,32 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+dispatch:phoneformat.js
+u2622:persistent-session
+gwendall:body-events
+momentjs:moment
+underscore
+sacha:spin
+iron:router
+meteorhacks:npm
+
+
+npm-container
+jquery
+mrgalaxy:stripe
+force-ssl
+matb33:collection-hooks
+dandv:http-more
+meteorhacks:async
+cunneen:mailgun
+gfk:mailgun-api
+jparker:crypto-base64
+base64
+abhiaiyer:meteor-twilio
+underscorestring:underscore.string
+nimble:restivus
+okgrow:iron-router-autoscroll

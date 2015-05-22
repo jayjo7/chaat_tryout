@@ -1,0 +1,164 @@
+.tv-OverallContainer {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-between;
+}
+.tv-MainHeader {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: row;
+	height: 100px;
+	flex: 1 1 auto;
+	background-color: rgba(255,239,0,0.10);
+	margin-bottom: 50px;
+	border-radius:20px;
+	
+}
+.tv-MainHeaderLeft {
+	flex: 1 1 auto;
+	font-size: 1.5em;
+	margin: 5px;
+	background-color: rgba(255,215,0,0.20);
+	padding-left:50px;
+	color: rgba(255,255,255,1.00);
+	text-shadow:1px 1px rgba(0,0,0,.50);
+	border-radius-left:20px;
+}
+.tv-MainHeaderCenter {
+	flex: 2 1 auto;
+	font-size: 2em;
+	margin: 5px;
+	background-color: rgba(255,215,0,1.00);
+	text-shadow:2px 2px rgba(255,255,255,.50);
+	color: brown;
+	text-transform: uppercase;
+	font-weight: 900;
+	border-radius:20px;
+		box-shadow: inset 1px 1px 10px #FF5400;
+}
+.tv-MainHeaderRight {
+	flex: 1 1 auto;
+	font-size: 1.5em;
+	margin: 5px;
+	background-color: rgba(255,215,0,0.20);
+	padding-right:50px;
+	color: rgba(255,255,255,1.00);
+	text-shadow:1px 1px rgba(0,0,0,.50);
+	border-radius-right:20px;
+}
+.tv-CategoryBlock {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	height: auto;
+	background-color: rgba(227,0,3,.10);
+	margin-bottom: 80px;
+	border: 2px solid rgba(255,255,255,0.20);
+	border-radius:20px;
+	box-shadow: inset 1px 1px 28px rgba(0,0,0,0.20);
+	padding:20px;
+}
+.tv-CategoryHeader {
+	width: 100%;
+	height: 50px;
+	flex: 0 1 auto;
+}
+.tv-category-title {
+	font-size: 2.5em;
+	color: white;
+	text-shadow: 2px 2px 5px rgba(0,0,0,0.50);
+	text-transform: uppercase;
+	font-weight: 900;
+	letter-spacing:3px;
+}
+/*.tv-CategoryColumn {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	width: 500px;
+	min-height: 400px;
+	background-color: rgba(227,0,3,.10);
+	margin: 10px;
+}*/
+.tv-itemBlock {
+	min-width: 500px;
+	z-index: 100;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	flex-wrap: no-wrap;
+	justify-content: space-between;
+	background: #a90329; /* Old browsers */
+	background: -moz-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #a90329), color-stop(44%, #8f0222), color-stop(100%, #6d0019)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #a90329 0%, #8f0222 44%, #6d0019 100%); /* W3C */
+ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019', GradientType=0 ); /* IE6-9 */
+	height: 45px;
+	padding: 7px;
+	color: white;
+	text-transform: uppercase;
+	margin: 10px;
+	border-top: 2px solid rgba(255,255,255,.80);
+	border-left: 2px solid rgba(255,255,255,.50);
+}
+.tv-item-Title {
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 1.4em;
+}
+.tv-special {
+	width: 70px;
+	height: 18px;
+	border-radius: 51px;
+	background: red;
+	text-align: center;
+	font-size: .9em;
+}
+.tv-item-Price {
+	background-color: yellow;
+	color: brown;
+	font-size: 1.3em;
+	padding: 1px;
+	border-radius: 5px;
+	width: 80px;
+	letter-spacing: 1px;
+	font-weight: 500;
+}
+.tv-body {
+	width: 100%;
+	font-family: Montserrat, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	background-color: gold;
+	padding: 20px;
+	border: solid 15px rgba(0,0,0,.60);
+	background: -webkit-linear-gradient(red, yellow, orange, gold, orange, orange, gold, red);
+	background: linear-gradient(red, yellow, orange, gold, orange, orange, gold, red);
+	box-shadow: inset -2px -2px 202px 2px rgba(158,1,37,.50);
+}
+.TV-notification {
+	font-size: 2em;
+	top: -15px;
+	right: -15px;
+	float: right;
+	position: relative;
+	text-align: center;
+	min-width: 50px;
+	max-height: 50px;
+	color: white;
+	border-radius: 12em;
+	border: 1px solid white;
+	box-shadow: 0 .1em .4em rgba(0,0,0,.5);
+	padding: 2px;
+	background-color: red;
+}
+.TV-soldout {
+	opacity: .3;
+	background-color: grey;
+	font-style: oblique;
+}

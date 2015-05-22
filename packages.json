@@ -1,0 +1,9 @@
+{
+  "request":"2.53.0",
+  "stripe": "3.0.3",
+  "twilio": "2.2.0",
+  "express": "4.12.4",
+  "mongodb":"2.0.33",
+  "body-parser":"1.12.4",
+  "exports": "0.0.1"
+}

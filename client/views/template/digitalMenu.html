@@ -1,0 +1,61 @@
+<template name="digitalMenu">
+
+<div class="digitalMenu" >
+
+<div class="tvcontainer"> 
+  <!--MENU--> 
+
+   {{#each getSettingsMulti "category_menu"}}
+
+   		{{#if isMenuAvailable Value}}	
+
+  <!--CATEGORY-->
+			  <div class="cat-container">
+			    <div class="text-center text-uppercase">
+			      <div class="imgheader "> <img class="img-circle menucircle " src="https://efmxurehx9yw.firesize.com/300x200/g_center/http://indipin.com/wp-content/uploads/2015/01/best-cities-in-india-to-try-the-sweetest-delicacies-tripoto-14219445758k4ng.jpg">
+			        <h1 class="menuimg-text">{{Value}}</h1>
+			        <h1 class="menuimg-text2">{{Value}}</h1>
+			      </div>
+			    </div>
+			    <div class="items-block">
+
+			    		{{#each menuMulti Value }}
+
+			    			{{#if isToSell fontStyle}}  
+
+
+
+								      <div class="lineitem {{soldOut fontLine}}">
+								        <div class="item pull-left">{{Name}}</div>
+
+								             {{#if isSpecial fontWeight}}
+								             	<div class="special">special</div>
+								             {{/if}}
+
+								        <div class="price pull-right text-center">{{currency Charge}}</div>
+								      </div>
+
+
+
+
+						    {{/if}}  
+
+
+			      		{{/each}}
+			     </div>
+			  </div>
+			  <!--//CATEGORY--> 
+
+
+  		{{/if}}
+
+  {{/each}}
+  
+
+  <!--//MENU--> 
+  
+</div>
+</div>
+
+
+</template>

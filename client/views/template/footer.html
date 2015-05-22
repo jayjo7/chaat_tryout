@@ -1,0 +1,51 @@
+ <template name="footer">
+
+<!-- Footer -->
+<footer class="text-center" id="callus">
+  <div class="footer-above">
+    <div class="container">
+      <div class="row">
+        <div class="footer-col col-md-4">
+          <h3>Hours</h3>
+            <p>{{getSettings 'store_hours'}}</p>
+        </div>
+        <div class="footer-col col-md-4 col-xs-12">
+          <h3>Connect</h3>
+          <ul class="list-inline">
+            <li> <a href="{{getSettings 'facebook_url' }}" class="btn-social btn-outline" target="_blank"><i class="fa fa-fw fa-facebook"></i></a> </li>
+            <li> <a href="{{getSettings 'twitter_url' }}" class="btn-social btn-outline" target="_blank"><i class="fa fa-fw fa-twitter"></i></a> </li>
+          </ul>
+        </div>
+        <div class="footer-col col-md-4">
+          <p>
+          <div class="text-center visible-sm visible-xs"> <a href="tel:+{{getSettings 'phone_number'}}" class="btn btn-lg btn-outline"> <i class="fa fa-phone"></i> Call </a> <br/>
+            <a href="{{getSettings 'google_location_url'}}" class="btn btn-lg btn-outline"> <i class="fa fa-map-marker"></i> Map </a> <br/>
+            <a href="sms:{{getSettings 'phone_number'}}" class="btn btn-lg btn-outline"> <i class="fa fa-comment-o fa-flip-horizontal"></i> Txt </a> <br/>
+          </div>
+          <div class="col-lg-12 col-lg-offset-2 text-center hidden-xs hidden-sm">
+            <h3>Location</h3>
+            <p><a  href="{{getSettings 'google_location_url'}}"  target="_blank" style="color:white">
+            {{getSettings 'address'}}</a></p>
+            <p> {{getSettings 'phone_number'}}</p>
+          </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-below">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">Powered by <a href='http://websheets.io'>Websheets&#8482;</a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Telephone Button (Only visible on small and extra-small screen sizes)
+<div class="scroll-top page-scroll visible-xs visble-sm" style="left:2%;"> <a class="btn btn-primary" href="tel:4255255244"> <i class="fa fa-phone"></i> </a> </div>
+ --> 
+
+
+
+</template>

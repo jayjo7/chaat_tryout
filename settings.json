@@ -1,0 +1,12 @@
+{
+  "public": {
+    "stripe": {
+      "stripePublicKey": "pk_test_1J0fGPuQStfrSiv6P1L5p8lz"
+    }
+  },
+  "private": {
+    "stripe": {
+      "stripePrivateKey": "sk_test_X1Qg62lGhGHpGlZdeWrlbPAs"
+    }
+  }
+}

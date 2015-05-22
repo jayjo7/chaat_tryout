@@ -1,0 +1,206 @@
+.bttn-modal {
+	border: none;
+	padding: 0.6em 1.2em;
+	background: #c0392b;
+	color: #fff;
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+	font-size: 1em;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	cursor: pointer;
+	display: inline-block;
+	margin: 3px 2px;
+	border-radius: 2px;
+	outline: none;
+	max-width: 200px;
+	margin-bottom: 5px;
+}
+.bttn-modal:hover {
+	background: #A5281B;
+}
+.bttn-modal:active {
+	background-color: red;
+}
+.checkout-modal-modal {
+	width: 100vw;
+	height: 100vh;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -moz-flex;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+	-webkit-justify-content: space-around;
+	justify-content: space-around  ;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	
+	position: fixed;
+	top:0px;
+	
+	
+	display: block;
+	background: rgba(243,0,4,1.00);
+	color: white;
+	overflow:auto;	
+	z-index: 20000;
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+/*	box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.20);*/
+}
+.checkout-modal-container-orderdata {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -moz-flex;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-wrap: wrap;
+	flex-wrap: wrap;
+	justify-content: center;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	
+}
+.checkout-modal-itemlist {
+	background-color:rgba(209,0,1,.20);
+	padding: 0px;
+}
+
+.checkout-modal-customerdetails, .checkout-modal-paymentdetails, .creditcarddetails {
+	padding: 20px;
+}
+.checkout-modal-total {
+	margin-top:15px;
+	height: 5px;
+	font-size: 1.2em;
+	font-weight: 600;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	background: rgba(234,100,86,1.00);
+	border-bottom: dotted 1px rgba(255,255,255,.40);
+}
+
+/*--ribbon-modal--*/
+.ribbon-modal {
+	height:38px;
+	width: 150px;
+	position: relative;
+	background: rgba(234,100,86,1);
+	color: #fff;
+	text-align: center;
+	padding: 0px 0em; /* Adjust to suit */
+	margin: 1em auto 2em; /* Based on 24px vertical rhythm. 48px bottom margin - normally 24 but the ribbon-modal 'graphics' take up 24px themselves so we double it. */
+}
+.ribbon-modal:before, .ribbon-modal:after {
+	content: "";
+	position: absolute;
+	display: block;
+	bottom: -.7em;
+	border: 1.5em solid rgba(165,0,0,.20);
+	z-index: -1;
+}
+.ribbon-modal:before {
+	left: -2em;
+	border-right-width: 1.5em;
+	border-left-color: transparent;
+}
+.ribbon-modal:after {
+	right: -2em;
+	border-left-width: 1.5em;
+	border-right-color: transparent;
+}
+.ribbon-modal .ribbon-modal-content:before, .ribbon-modal .ribbon-modal-content:after {
+	content: "";
+	position: absolute;
+	display: block;
+	border-style: solid;
+	border-color: #804f7c transparent transparent transparent;
+	bottom: -.7em;
+}
+.ribbon-modal .ribbon-modal-content:before {
+	left: 0;
+	border-width: 1em 0 0 1em;
+}
+.ribbon-modal .ribbon-modal-content:after {
+	right: 0;
+	border-width: 1em 1em 0 0;
+}
+/*--Table--*/
+
+.checktable-modal{
+	border:1px solid rgba(0,0,0,0.10)
+	}
+.checktable-modal tr:nth-last-child(1) {
+	background-color:rgba(177,0,1,0.70);
+	text-transform: uppercase;
+	font-weight:200;
+}
+.checktable-modal th {
+	width: 25%;
+}
+.checktable-modal th:nth-child(1) {
+	width: 45%;
+}
+
+
+.qtyy-modal {
+	border-radius: 5px;
+	outline: none;
+	color: black;
+	width: 3em;
+	font-weight: 500;
+	border: 0px solid;
+	box-shadow: -1px -1px 2px 1px rgba(200,0,3,1.00);
+	text-align: center;
+}
+.qtyy-modal:focus, .textfld-modal:focus {
+	background-color: rgba(255,215,0,1.50);
+}
+.textfld-modal {
+	border-radius: 3px;
+	outline: none;
+	color: black;
+	text-indent: 5px;
+	font-weight: 500;
+	border: 0px solid;
+	padding: 2px;
+	box-shadow: -1px -1px 2px 1px rgba(200,0,3,1.00);
+}
+.bgm-modal {
+	background-color: rgba(238,238,238,0.20);
+	border-radius: 5px;
+}
+.cclock-modal {
+	text-indent: 20px;
+	width: 13em;
+}
+.cclock-modal + .glyphicon {
+	position: relative;
+	left: -175px;
+	color: lightgrey;
+	font-size: .8em;
+}
+
+@media(max-width:700px) {
+.checkout-modal-modal {
+	width: 100%;
+	height: auto;
+
+
+}
+
+.checkout-modal-customerdetails, .checkout-modal-paymentdetails, .creditcarddetails {
+	padding: 2px;
+}
+.textfld-modal {
+	border-radius: 2px;
+	padding: 1px;
+}
+
+.bttn-modal {
+	outline: none;
+	max-width: 150px;
+}
+}

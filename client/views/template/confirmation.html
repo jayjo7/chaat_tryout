@@ -1,0 +1,282 @@
+<template name="confirmation">
+<nav class="navbar navbar-default" style="background-color: white ;border-top:solid 5px red; z-index: 0; min-height:70px;margin-bottom: 0px;" >
+  <div class="container"> 
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header page-scroll">
+
+      <a class="navbar-brand" href="{{pathFor 'home'}}"><span class=""><img src="/img/headerlogo.png" style=" position:absolute; top:4px; left:0px;" /></span></a></div>
+    
+    <!-- Collect the nav links, forms, and other content for toggling -->
+
+    <!-- /.navbar-collapse --> 
+  </div>
+  <!-- /.container-fluid --> 
+</nav>
+<table align="center" cellpadding="0" cellspacing="0" class="container-for-gmail-android" width="100%">
+  {{#if isOrderStatusAlert UniqueId}}
+    <tr>
+        <td class='.danger'> {{getOrderStatusAlert UniqueId}}</td>
+    </tr>  
+  {{/if}}  
+  <tr>
+    <td align="center" valign="top" width="100%"  class="content-padding">
+      <center>
+        <table cellspacing="0" cellpadding="0" width="100%" class="w320">
+          <tr>
+            <td class="header-lg"  style="font-family: 'Rock Salt';"> {{customerName UniqueId}} ,
+
+              {{#if isReady UniqueId}}
+
+                Your Order is Ready !
+
+              {{else}}
+
+                {{#if isDelivered UniqueId}}
+
+                Your Order has been delivered !
+
+                {{else}}
+
+                  Thank You !
+
+                {{/if}}
+
+              {{/if}}
+
+
+             </td>
+          </tr>
+          <tr>
+            <td class="free-text">              
+
+              {{#each message UniqueId}}
+
+                {{this}} <br /><br />
+
+              {{/each}}
+            </td>
+
+          </tr>
+          <tr>
+            <td class="mini-block-container">
+              <table cellspacing="0" cellpadding="0" width="100%"  style="border-collapse:separate !important;">
+                <tr>
+                  <td class="mini-block">
+                  <span class="header-sm highlight">Your Order # [ {{orderNumber UniqueId}} ]</span>
+                  <br />  <br /> 
+                    <table cellpadding="0" cellspacing="0" width="100%" align="center">
+                      <tr>
+                        <td  align="center">
+                          <table cellpadding="0" align="center" cellspacing="0" width="100%">
+                            <tr>
+
+                              <!-- STEP ONE -->
+                              <td class="step active">
+                                <img src="/img/1-on.png"  width='100' alt="Order Placed" /><br />
+                                <b>✓</b><br />Order Placed</td>
+
+                                {{#if isInKitchen UniqueId }}
+
+                                       <!-- STEP TWO -->
+                                      <td class="step active">
+                                        <img src="/img/2-on.png" alt="In Kitchen" /><br />
+                                <b>✓</b><br />In Kitchen</td>
+                                {{else}}
+
+                               <!-- STEP TWO -->
+                                      <td class="step ">
+                                        <img src="/img/2-off.png" alt="In Kitchen" /><br />
+                                <b>&nbsp;</b><br />In Kitchen</td>
+                                {{/if}}
+
+
+                                {{#if isSaleComplete UniqueId}}
+
+                                      <td class="step active">
+                                      <img src="/img/3-on.png" alt="Ready for Pickup" /><br />
+                                <b>✓</b><br />Ready for Pickup</td>
+
+                                {{else}}
+                                     <!-- STEP THREE -->
+                                    <td class="step">
+                                      <img src="/img/3-off.png" alt="Not Ready" /><br />
+                                <b>&nbsp;</b><br />Ready for Pickup</td>
+
+                                {{/if}}
+
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="button">
+
+                          <!--
+                          <div> -->
+
+                          <!--[if mso]>
+                            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://" style="height:45px;v-text-anchor:middle;width:155px;" arcsize="15%" strokecolor="#ffffff" fillcolor="#ff6f6f">
+                              <w:anchorlock/>
+                              <center style="color:#ffffff;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;">Check Status</center>
+                            </v:roundrect>
+                          <![endif]-->
+                          <!--
+                          <a href="#" style="background-color:#ff6f6f;border-radius:5px;color:#ffffff;display:inline-block;font-family:'Cabin', Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;line-height:45px;text-align:center;text-decoration:none;width:155px;-webkit-text-size-adjust:none;mso-hide:all;">Check Status</a>
+                        </div>
+                        <br />
+                         -->
+                        <hr color="#CFCFCF" width="100%" size="1" align="center" />
+                          <table cellspacing="0" cellpadding="0" width="100%" align="center" >
+                            <tr>
+                              <td ><br /><span class="header-sm "  style="font-family: 'Rock Salt';">Pickup at</span> <br />
+                                <br />
+                                <span> <strong>{{getSettings 'store_name'}}</strong><br />
+                                    {{getSettings 'address'}}<br />
+                                      <br />
+                              </span>
+                              Phone:&nbsp;<a href="tel:{{phoneNumber.Value}}" class="phone">{{getSettings 'phone_number'}}</a></td>
+                            </tr>
+                            
+                          </table>
+
+                        
+                              <br/>
+  <div><!--[if mso]>
+                            <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://" style="height:45px;v-text-anchor:middle;width:155px;" arcsize="15%" strokecolor="#ffffff" fillcolor="#ff6f6f">
+                              <w:anchorlock/>
+                              <center style="color:#ffffff;font-family:Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;">Driving Directions</center>
+                            </v:roundrect>
+                          <![endif]--><a href={{getSettings 'google_location_url'}}  target="_blank"  style="background-color:green;border-radius:5px;color:#ffffff;display:inline-block;font-family:'Cabin', Helvetica, Arial, sans-serif;font-size:14px;font-weight:regular;line-height:45px;text-align:center;text-decoration:none;width:155px;-webkit-text-size-adjust:none;mso-hide:all;">Driving Directions</a></div>
+                        
+
+                        </td>
+                      </tr>
+
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>                         
+
+      </center>
+    </td>
+  </tr>
+
+    <tr>
+    <td align="center" valign="top" width="100%" style="background-color: #ffffff;  border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5;">
+      <center>
+        <table cellpadding="0" cellspacing="0" width="600" class="w320">
+            <tr>
+              <td class="item-table">
+                <table cellspacing="0" cellpadding="0" width="100%">
+                  <tr>
+                    <td class="title-dark" width="300">
+                       Item
+                    </td>
+                    <td class="title-dark" width="163">
+                      Qty
+                    </td>
+                    <td class="title-dark" width="97" style="text-align: right">
+                      Total
+                    </td>
+                  </tr>
+
+                  {{#each orderedCart UniqueId}}
+
+                  <tr>
+                    <td class="item-col item">
+                      <table cellspacing="0" cellpadding="0" width="100%">
+                        <tr>
+
+                          <td class="product"><span style="color: #4d4d4d; font-weight:bold;text-transform: uppercase;">{{Name}}</span>  </td>
+                        </tr>
+                      </table>
+                    </td>
+                    <td class="item-col quantity" >
+                      {{qty}}
+                    </td>
+                    <td class="item-col" style="text-align: right">
+                      {{currency totalCharge}}
+                    </td>
+                  </tr>
+
+        {{/each}}
+
+                  <tr>
+                    <td class="item-col item mobile-row-padding"></td>
+                    <td class="item-col quantity"></td>
+                    <td class="item-col price"></td>
+                  </tr>
+
+
+                  <tr>
+
+                          {{#if haveMessageToKitchen UniqueId}} 
+
+                                <td style="background-color: #ffffff; border-top: 1px solid #cccccc;">
+                                <div>
+                                    <span style="color: #4d4d4d; font-weight:bold;">Message to Kitchen:</span> 
+                                        <br /><br/> {{messageToKitchen UniqueId}}
+                                    </div>
+                                </td>
+                              {{else}}  
+                                <td >
+                                </td>
+
+                          {{/if}}
+
+                              <td  style="text-align:right; padding-right: 10px; border-top: 1px solid #cccccc;">
+
+                                  {{#if showSubTotal UniqueId}}
+                                    <span class="total-space" >Subtotal</span> <br />
+                                  {{/if}}
+                                  {{#if haveTax UniqueId}}
+                                    <span class="total-space">Tax</span> <br />
+                                  {{/if}}
+                                  {{#if haveDiscount UniqueId}}
+                                      <span class="total-space">Discount</span> <br />
+                                  {{/if}}
+                                  <span class="total-space" style="font-weight: bold; color: #4d4d4d">Total</span>
+                              </td>
+
+
+                                <td  style="text-align: right; border-top: 1px solid #cccccc;">
+                                  {{#if showSubTotal UniqueId}}
+                                    <span class="total-space">{{getSubTotal UniqueId}}</span> <br />
+                                  {{/if}}
+                                  {{#if haveTax UniqueId}}
+                                    <span class="total-space">{{getTax UniqueId }}</span> <br />
+                                  {{/if}}
+                                 {{#if haveDiscount UniqueId}}
+                                  <span class="total-space">({{getDiscount UniqueId }})</span> <br /> 
+                                  {{/if}}
+                                <span class="total-space" style="font-weight:bold; color: #4d4d4d">{{getTotal UniqueId}}</span>
+                            </td>
+
+                  </tr>  
+                  <tr>
+                            <td>
+                            </td>
+
+                            <td style="text-align: right;">
+                              <span style="color: #4d4d4d; font-weight:bold;">Payment:</span>
+                            </td>
+
+                            <td style="text-align: right;">
+                              <span style="color: #4d4d4d; font-weight:bold;">{{getPaymentOption UniqueId}}</span>
+
+                            </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+        </table>
+      </center>
+    </td>
+  </tr>
+
+</table>
+
+</template>
