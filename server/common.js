@@ -291,13 +291,13 @@ Meteor.methods({
 
   getSetting:function(key, orgname)
   {
-  		console.log('getSetting: Key = ' + key );
-      console.log('getSetting: orgname = ' + orgname );
+  		//console.log('getSetting: Key = ' + key );
+      //console.log('getSetting: orgname = ' + orgname );
 
   		var settings = Settings.findOne({Key: key, orgname:orgname});
   		if(settings)
   		{
-  			console.log('getSetting: value = ' + settings.Value );
+  			//console.log('getSetting: value = ' + settings.Value );
   			return settings.Value;
   		}
   		else
@@ -307,12 +307,12 @@ Meteor.methods({
   },
   getAppSettings:function(key, orgname)
   {
-  	  	console.log('getAppSettings: Key = ' + key );
-        console.log('getSetting: orgname = ' + orgname );
+  	  	//console.log('getAppSettings: Key = ' + key );
+        //console.log('getSetting: orgname = ' + orgname );
   	  	var appSettings= AppSettings.findOne({Key: key, orgname:orgname});
   		if(settings)
   		{
-  			console.log('getAppSettings: value = ' + appSettings.Value );
+  			//console.log('getAppSettings: value = ' + appSettings.Value );
   			return appSettings.Value;
   		}
   		else
@@ -325,7 +325,7 @@ Meteor.methods({
 
   getLocalTime:function(orgname)
   {
-      console.log('getLocalTime: orgname = ' + orgname );
+      //console.log('getLocalTime: orgname = ' + orgname );
       return moment().utcOffset(gmtOffset(orgname)).format('MM/DD/YYYY hh:mm:ss A');
 
   }
