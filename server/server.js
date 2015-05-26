@@ -1,31 +1,10 @@
 Meteor.methods({
 
-    getCurrencyCode:function(orgname){
-
-  	//var tax = Settings.findOne( { Key:'tax'});;
-    var tax = Settings.findOne({$and : [{Key: "currency_code"}, {orgname:orgname}, {Value : {"$exists" : true, "$ne" : ""}}]});
-
-  	return tax;
-
-  },
-
-
-  getUUID: function () {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    console.log("uuid = " + uuid);
-    return uuid;
-},
-
-	addToCart:function(qty, product, session,Name, Category, Charge, orgname){
+	addToCart:function(qty, product, session,Name, Category, Charge, orgname)
+	{
 		qty = Number (qty);
 		if(qty>0)
 		{
-
 			var now = Meteor.call('getLocalTime', orgname);
 
 			console.log(session + ' addToCart:now = ' + now);
@@ -61,50 +40,55 @@ Meteor.methods({
 		}
 	},
 	
-	removeCartItem:function(product,sessionId, orgname){
+	removeCartItem:function(product,sessionId, orgname)
+	{
 		console.log('Removing from Cart: Sessionid = ' + sessionId + ' :: product' +product);
 		CartItems.remove({session:sessionId, product:product, orgname:orgname});
 	},
-		removeAllCartItem:function(sessionId){
+
+	removeAllCartItem:function(sessionId)
+	{
 		CartItems.remove({session:sessionId});
 	},
 
-	getOrder:function(sessionId, orgname){
+	getOrder:function(sessionId, orgname)
+	{
 
 		console.log("sessionId = " + sessionId);
 		var order = Orders.findOne({UniqueId:sessionId, orgname:orgname});
 		console.log("order = " + order);
 
 		return order;
-
 	},
 
-	getNextSequenceValue: function (){
+	getNextSequenceValue: function ()
+	{
 		
 		try{
 
-			        var currentId = Counters.findOne({},{sort:{orderNumber:-1}}) || 1;
+			var currentId = Counters.findOne({},{sort:{orderNumber:-1}}) || 1;
 
-			        	for(var key in currentId)
-			        	{
-			        		console.log("getNextSequenceValue: currentId: " + key + " = " + currentId[key]);
-			        	}
+			for(var key in currentId)
+			{
+			    console.log("getNextSequenceValue: currentId: " + key + " = " + currentId[key]);
+			}
 
-        			var nextOrderumber= Number (currentId.orderNumber) + 1;
-        			Counters.insert({orderNumber:nextOrderumber});
-        			console.log("getNextSequenceValue: nextOrderumber: " + nextOrderumber);
+        	var nextOrderumber= Number (currentId.orderNumber) + 1;
+        	Counters.insert({orderNumber:nextOrderumber});
+        	console.log("getNextSequenceValue: nextOrderumber: " + nextOrderumber);
 
-        			var sequence = Counters.findOne({orderNumber:nextOrderumber});
-        			for(var key in sequence)
-        			{
-        				console.log("getNextSequenceValue: sequence: " + key + " = " +sequence[key]);
-        			}
-        			return sequence;
+        	var sequence = Counters.findOne({orderNumber:nextOrderumber});
+        	for(var key in sequence)
+        	{
+        		console.log("getNextSequenceValue: sequence: " + key + " = " +sequence[key]);
+        	}
 
-        		}catch(error)
-        		{
+        	return sequence;
+
+        }catch(error)
+        {
         			console.log(error);
-        		}
+        }
    	
 	},
 
@@ -549,9 +533,9 @@ OrdersMeta.after.insert(function (userId, doc) {
 
 				if(isSmsClient(doc.orgname))
 				{
-
+					var clientPhoneNumberText = Meteor.call('getSetting', 'phone_number_texting', doc.orgname);
 					try{
-					 	var response = Meteor.call('smsOrderReceived', doc, clientPhoneNumberText(doc.orgname), 'client');
+					 	var response = Meteor.call('smsOrderReceived', doc, clientPhoneNumberText, 'client');
 					 	for(var key in response.result)
 					 	{
 					 		console.log(key + ' = ' + response.result[key]);

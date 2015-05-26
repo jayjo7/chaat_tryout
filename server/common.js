@@ -92,10 +92,10 @@ isSmsClient             = function(orgname)
                             }
                           };
 
-clientPhoneNumberText    = function(orgname)
-                           { 
-                                return Meteor.settings.private[orgname]. smsClientPhoneNumber;
-                           };  
+//clientPhoneNumberText    = function(orgname)
+//                           { 
+//                                return Meteor.settings.private[orgname]. smsClientPhoneNumber;
+//                           };  
 
 
 isSmsTwilio             =  function(orgname)
@@ -273,7 +273,7 @@ gmtOffset              = function(orgname)
                             return  Meteor.settings.public[orgname].gmtOffset;
                           };
 
-orgCountryCode              = function(orgname)
+orgCountryCode          = function(orgname)
                           {
                             return  Meteor.settings.public[orgname].countryCode;
                           };                          
@@ -283,9 +283,10 @@ websheetsUrl          = function(orgname)
                             return  Meteor.settings.private[orgname].websheetsUrl;
                           };
 
-
-
-
+orgCurrencyCode       = function(orgname)
+                        {
+                            return  Meteor.settings.public[orgname].currencyCode;
+                        }; 
 
 Meteor.methods({
 

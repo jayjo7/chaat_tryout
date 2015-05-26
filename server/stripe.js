@@ -10,7 +10,7 @@ Meteor.methods({
 	stripeAuthAndCharge: function(order)
 	{
 
-		var currencyCode = Meteor.call('getCurrencyCode', order.orgname);
+		var currencyCode = orgCurrencyCode(order.orgname);
 		console.log(order.sessionId + " :currencyCode = " + currencyCode.Value);
 	
 		for(var key in order.cardToken)

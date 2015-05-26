@@ -182,7 +182,15 @@ Template.registerHelper('isPaymentEnabled', function(){
 	    }
 
 
-})
+});
+
+Template.registerHelper('imageFormatter', function(){
+
+	var orgname = Session.get(ORG_NAME_SESSION_KEY);
+
+	return Meteor.settings.public[orgname].imageFormatter;
+
+});
 
 
 validData = function(input)
