@@ -1,14 +1,11 @@
-var options = {
-        apiKey: mailGunApiKey,
-        domain: mailGunDomain
-        }
-var sendEmail = new Mailgun(options);
 
+ var sendEmail;
 
 Meteor.methods({
 
     sendCCAuthFailedNotification:function(order)
     {
+        initializeMailGun(order.orgname);
         var response      =   {};
         response.status   =   STATUS_SUCCESS;
         var CLIENT_NAME      = Meteor.call('getSetting','store_name', order.orgname);
@@ -35,85 +32,82 @@ Meteor.methods({
       return response;
     },
 
-    sendOrderReceivedEmailClient:function(order)
-    {
-        var response ={};
-        response.status=STATUS_SUCCESS;
-        var body      =  buildOrderReceivedBody(order)
-        try{
-
-              var CLIENT_NAME      = Meteor.call('getSetting','store_name' , order.orgname);
-              subject = 'Owner ' +  CLIENT_NAME+': Received Order [' + order.OrderNumber + ']';
-              
-              sendEmail.send({
-                                'to'     :   clientEmailAddress,
-                                'from'   :   fromEmailAddress ,
-                                'text'   :   body,
-                                'subject':   subject 
-                              });
-          }catch (e)
-          {
-            console.log('sendOrderReceivedEmailClient: Trouble sending email to the client' + e);
-            response.status   =  STATUS_FAILED;
-            response.error    =  e.toString();
-          }
-      return response;
-
-    },
-    sendOrderReceivedEmailWebmaster:function(order)
-    {
-        var response ={};
-        response.status=STATUS_SUCCESS;
-        var body      =  buildOrderReceivedBody(order)
-        try{
-
-              var CLIENT_NAME      = Meteor.call('getSetting','store_name' , order.orgname);
-              subject = 'Owner ' +  CLIENT_NAME+': Received Order [' + order.OrderNumber + ']';
-              
-              sendEmail.send({
-                                'to'     :   webmasterEmailAddress,
-                                'from'   :   fromEmailAddress ,
-                                'text'   :   body,
-                                'subject':   subject 
-                              });
-          }catch (e)
-          {
-            console.log('sendOrderReceivedEmailClient: Trouble sending email to the client' + e);
-            response.status =   STATUS_FAILED;
-            response.error  =   e.toString();
-          }
-      return response;
-
-    },
-
-    sendOrderReceivedEmail: function(order)
+    emailOrderReceived : function(order, whoReceiving)
     {
 
-        var response ={};
-        response.status=STATUS_SUCCESS;
-        var subject   = 'Your Order [' + order.OrderNumber + ']';
-        var body      =  buildOrderReceivedBody(order)
+      initializeMailGun(order.orgname);
+      var response      = {};
+      response.status   = STATUS_SUCCESS;
+      var body          = buildOrderReceivedBody(order);
+      var toEmailAddress;
 
-        //Send Email to customer
-        try{
-          	sendEmail.send({
-                                     'to'		  : 	order.CustomerEmail,
-                                     'from'	  : 	fromEmailAddress ,
-                                     'text'	  : 	body,
-                                     'subject': 	subject
-
-                                 });
-        }catch(e)
+      switch (whoReceiving)
         {
-          console.log('sendOrderReceivedEmail: Trouble sending email to the customer' + e);
-          response.status   =   STATUS_FAILED;
-          response.error    =   e.toString();
+
+          case 'client':
+              toEmailAddress      = clientEmailAddress (order.orgname);
+              var CLIENT_NAME     = Meteor.call('getSetting','store_name' , order.orgname);
+              subject = 'Owner ' +  CLIENT_NAME+': Received Order [' + order.OrderNumber + ']';
+
+              break;
+
+          case 'webmaster':
+              toEmailAddress      = webmasterEmailAddress (order.orgname);
+              var CLIENT_NAME     = Meteor.call('getSetting','store_name' , order.orgname);
+              subject = 'Owner ' +  CLIENT_NAME+': Received Order [' + order.OrderNumber + ']';
+
+              break;
+
+          default:
+            
+              var subject     = 'Your Order [' + order.OrderNumber + ']';
+              toEmailAddress  =  order.CustomerEmail;
+
+
         }
 
-      return response;
-    }
+              //Send Email to customer
+        try{
+            var result = sendEmail.send({
+                                     'to'     :   toEmailAddress,
+                                     'from'   :   fromEmailAddress(order.orgname),
+                                     'text'   :   body,
+                                     'subject':   subject
+
+                                 });
+            response.result = result;
+              
+            console.log(order.sessionId +": emailOrderReceived : result received from vendor: " +JSON.stringify(response.result, null, 4));
+
+                       
+        }catch(e)
+        {
+          console.log('emailOrderReceived: Trouble sending email to the customer' + e);
+          var result ={};
+          result.status = STATUS_FATAL;
+          result.error = e.toString();
+          response.result = result;
+        }
+
+      return response;  
+
+
+    },
+
 
 });
+
+var initializeMailGun = function(orgname)
+{
+          var options = {
+          apiKey: mailGunApiKey(orgname),
+          domain: mailGunDomain(orgname)
+          }
+        //console.log("initializeMailGun : options: " +JSON.stringify(options, null, 4));
+
+        sendEmail = new Mailgun(options);
+
+}
 
 
 
@@ -121,15 +115,15 @@ var buildOrderReceivedBody = function(order)
 {
 
     var CLIENT_PHONE_NUMBER   = Meteor.call('getSetting', 'phone_number'  , order.orgname);
-    console.log('buildOrderReceivedBody: CLIENT_PHONE_NUMBER = ' +CLIENT_PHONE_NUMBER);
+    //console.log('buildOrderReceivedBody: CLIENT_PHONE_NUMBER = ' +CLIENT_PHONE_NUMBER);
     var CLIENT_ADDRESS        = Meteor.call('getSetting', 'address' , order.orgname);
-    console.log('buildOrderReceivedBody: CLIENT_ADDRESS = ' +CLIENT_ADDRESS);    
+    //console.log('buildOrderReceivedBody: CLIENT_ADDRESS = ' +CLIENT_ADDRESS);    
     var CLIENT_NAME           = Meteor.call('getSetting','store_name' , order.orgname);
-    console.log('buildOrderReceivedBody: CLIENT_NAME = ' +CLIENT_NAME);    
+    //console.log('buildOrderReceivedBody: CLIENT_NAME = ' +CLIENT_NAME);    
     var EMAIl_CUSTOM_MESSAGE     = Meteor.call('getSetting','email_custom_message' , order.orgname);
-    console.log('buildOrderReceivedBody: EMAIl_CUSTOM_MESSAGE  = ' +EMAIl_CUSTOM_MESSAGE );    
+    //console.log('buildOrderReceivedBody: EMAIl_CUSTOM_MESSAGE  = ' +EMAIl_CUSTOM_MESSAGE );    
     var ORDER_STATUS_URL      = Meteor.absoluteUrl('os', {replaceLocalhost:true}) + "/";
-    console.log('buildOrderReceivedBody: ORDER_STATUS_URL = ' +ORDER_STATUS_URL);
+    //console.log('buildOrderReceivedBody: ORDER_STATUS_URL = ' +ORDER_STATUS_URL);
   
 	  var body= order.CustomerName + ', Thank you for your order.' +'\n\n' ;
 
@@ -171,7 +165,7 @@ var buildOrderReceivedBody = function(order)
         body = body + '\n\n\n' + EMAIl_CUSTOM_MESSAGE;
       }
       
-      body = body + '\n\n' + 'Auto generated, please do not reply to this email. If needed please email ' + clientEmailAddress;
+      body = body + '\n\n' + 'Auto generated, please do not reply to this email. If needed please email ' + clientEmailAddress(order.orgname);
       console.log(order.sessionId + ' :buildOrderReceivedBody:body = ' + body);
       return body;
 

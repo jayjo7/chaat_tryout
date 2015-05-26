@@ -13,7 +13,7 @@ cunneen:mailgun@0.9.1
 dandv:http-more@1.0.7_1
 ddp@1.1.0
 deps@1.0.7
-dispatch:phoneformat.js@1.2.2
+dispatch:phoneformat.js@1.2.4
 ejson@1.0.6
 email@1.0.6
 fastclick@1.0.3
@@ -51,7 +51,7 @@ mobile-status-bar@1.0.3
 momentjs:moment@2.10.3
 mongo@1.1.0
 mrgalaxy:stripe@2.1.0
-nimble:restivus@0.6.5
+nimble:restivus@0.6.6
 npm-container@1.0.0
 observe-sequence@1.0.6
 okgrow:iron-router-autoscroll@0.0.8
@@ -68,7 +68,7 @@ spacebars@1.0.6
 spacebars-compiler@1.0.6
 templating@1.1.1
 tracker@1.0.7
-u2622:persistent-session@0.3.4
+u2622:persistent-session@0.3.5
 ui@1.0.6
 underscore@1.0.3
 underscorestring:underscore.string@3.0.3_1

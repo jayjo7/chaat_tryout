@@ -68,10 +68,14 @@
           <td width="7"><input  type="radio" name="paymentOption" value="onPickup"  id="inputRadioPickUp" checked></td>
           <td style="color:white;text-align:left;" nowrap>&nbsp;Pay On Pickup</td>
         </tr>
-        <tr>
-          <td ><input type="radio" name="paymentOption"  value="now" id="inputRadioNow" ></td>
-          <td  style="color:white; text-align:left;" nowrap>&nbsp;Pay Now</td>
-        </tr>
+
+        {{#if isPaymentEnabled}}
+          <tr>
+            <td ><input type="radio" name="paymentOption"  value="now" id="inputRadioNow" ></td>
+            <td  style="color:white; text-align:left;" nowrap>&nbsp;Pay Now</td>
+          </tr>
+        {{/if}}  
+        
       </table>
     </div>
     <!--Credit Card Details-->

@@ -4,9 +4,11 @@ Meteor.methods({
 	postWebsheets:function(doc)
 	{
 		var response ={};
+    var sheetsUrl = websheetsUrl(doc.orgname);
+    console.log(doc.sessionId + ": postWebsheets:sheetsUrl: " + sheetsUrl);
 		 try{
   				
-  			response = HTTP.post(websheetsUrl,
+  			response = HTTP.post(sheetsUrl,
   			  	{
   					data: doc,
   					followAllRedirects: true

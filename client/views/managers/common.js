@@ -1,5 +1,5 @@
 ORG_NAME_SESSION_KEY 	='websheets_orgName';
-ORG_NAME 	='chowpaatychaat';
+ORG_NAME 				='chowpaatychaat';
 
 Template.registerHelper('getSettings', function(key)
 {
@@ -166,8 +166,27 @@ Template.registerHelper('soldOut', function(fontLine)
 
 });
 
+Template.registerHelper('isPaymentEnabled', function(){
 
-validData = function(input){
+	    var orgname = Session.get(ORG_NAME_SESSION_KEY);
+
+	    console.log('Meteor.settings.public[orgname].onlinePayment = ' + Meteor.settings.public[orgname].onlinePayment);
+
+	    if('enabled' === Meteor.settings.public[orgname].onlinePayment)
+	    {
+	    	return true;
+	    }
+	    else
+	    {
+	    	false;
+	    }
+
+
+})
+
+
+validData = function(input)
+{
 	console.log("validData:input = " + input);
 
 	if(input)
@@ -180,4 +199,46 @@ validData = function(input){
 	}
 
 }
+
+isPaymentStripe	 = function(orgname) 
+{
+    if('STRIPE' === Meteor.settings.public[orgname].paymentProcessor.toUpperCase())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+isPaymentSquare	 = function(orgname) 
+{
+    if('SQUARE' === Meteor.settings.public[orgname].paymentProcessor.toUpperCase())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+isPaymentBrainTree	 = function(orgname) 
+{
+    if('BRAINTREE' === Meteor.settings.public[orgname].paymentProcessor.toUpperCase())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+gmtOffset              = function(orgname)
+{
+    return  Meteor.settings.public[orgname]. gmtOffset;
+}
+
 

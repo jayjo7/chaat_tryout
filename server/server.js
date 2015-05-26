@@ -26,12 +26,7 @@ Meteor.methods({
 		if(qty>0)
 		{
 
-			//var gmt_offset = Settings.findOne({Key: 'gmt_offset'})
-
-			//console.log(session + ' addToCart:gmt_offset = ' + gmt_offset.Value );
-
-			//var now =moment().utcOffset(Number(gmt_offset.)).format('MM/DD/YYYY hh:mm:ss A');
-			var now = Meteor.call('getLocalTime');
+			var now = Meteor.call('getLocalTime', orgname);
 
 			console.log(session + ' addToCart:now = ' + now);
 
@@ -130,7 +125,7 @@ Meteor.methods({
 			order.Status 			= STATE_ONE;
 			order.OrderNumber 		= sequence.orderNumber;
 			order.UniqueId 			= sequence._id;
-			order.TimeOrderReceived = Meteor.call('getLocalTime');
+			order.TimeOrderReceived = Meteor.call('getLocalTime', orgname );
 			order.CustomerName 		= contactInfo.contactName;
 			order.CustomerPhone 	= contactInfo.phoneNumber;
 			order.CustomerEmail 	= contactInfo.email;
@@ -307,7 +302,7 @@ OrdersMeta.after.insert(function (userId, doc) {
  	{	
  		processStatus.payment.status = STATUS_ENABLED;
 
- 		if('YES' === isPaymentStripe(doc.orgname).toUpperCase())
+ 		if( isPaymentStripe(doc.orgname))
  		{   
  			payment.vendor  = 'Stripe';
 	 		payment.status 	= STATUS_SUCCESS;
@@ -389,22 +384,31 @@ OrdersMeta.after.insert(function (userId, doc) {
 	 //End Sending the Websheets
 
 	 //Start Sending Email
- 	if('YES'=== isEmailEnabled.toUpperCase())
+ 	if(isEmailEnabled(doc.orgname))
  	{
  		processStatus.email.status = STATUS_ENABLED;
 
- 		if('YES' === isEmailMailgun.toUpperCase())
+ 		if(isEmailMailgun(doc.orgname))
  		{
 		 		//Customer Email
 			 	if(doc.CustomerEmail)
 			 	{
 
 			 		try{
-					 	var response = Meteor.call('sendOrderReceivedEmail', doc);
+					 	var response = Meteor.call('emailOrderReceived', doc, 'customer');
+					    console.log(JSON.stringify(response, null, 4));
+
 					 	for(var key in response)
 					 	{
 					 		emailCustomer [key] = response[key];
 					 	}
+
+					 	if(response.result.error)
+            			{
+            				emailCustomer.status 	= STATUS_FAILED;
+                            emailCustomer.error 	= response.result.error.statusCode;
+            			}
+
 
 					}catch (e)
 					{
@@ -426,15 +430,20 @@ OrdersMeta.after.insert(function (userId, doc) {
 			 	processStatus.email.emailCustomer = emailCustomer;
 
 			 	//Client Email
-			 	if('YES' === isClientEmailOrderReceived.toUpperCase())
+			 	if(isClientEmailOrderReceived(doc.orgname))
 			 	{
 
 			 		try{
-					 	var response = Meteor.call('sendOrderReceivedEmailClient', doc);
+					 	var response = Meteor.call('emailOrderReceived', doc, 'client');
 					 	for(var key in response)
 					 	{
 					 		emailClient [key] = response[key];
 					 	}
+					 	if(response.result.error)
+            			{
+            				emailClient.status 	= STATUS_FAILED;
+                            emailClient.error 	= response.result.error.statusCode;
+            			}
 
 					}catch (e)
 					{
@@ -455,14 +464,19 @@ OrdersMeta.after.insert(function (userId, doc) {
 			 	processStatus.email.emailClient = emailClient;
 
 			 	//Webmaster Email
-			 	if('YES' === isEmailWebmaster.toUpperCase())
+			 	if(isEmailWebmaster(doc.orgname))
 			 	{
 			 		try{
-					 	var response = Meteor.call('sendOrderReceivedEmailWebmaster', doc);
+					 	var response = Meteor.call('emailOrderReceived', doc, 'webmaster');
 					 	for(var key in response)
 					 	{
 					 		emailWebmaster [key] = response[key];
 					 	}
+					 	if(response.result.error)
+            			{
+            				emailWebmaster.status 	= STATUS_FAILED;
+                            emailWebmaster.error 	= response.result.error.statusCode;
+            			}
 
 					}catch (e)
 					{
@@ -500,9 +514,9 @@ OrdersMeta.after.insert(function (userId, doc) {
 	//Ens Sending the Email
 
 	//Start Sending the SMS
-	if('YES' === isSmsEnabled.toUpperCase())
+	if(isSmsEnabled(doc.orgname))
 	{
-		if ('YES' === isSmsTwilio.toUpperCase())
+		if (isSmsTwilio(doc.orgname))
 		{
 				if(doc.CustomerPhone)
 				{
@@ -533,11 +547,11 @@ OrdersMeta.after.insert(function (userId, doc) {
 				processStatus.sms.smsCustomer = smsCustomer;
 
 
-				if('YES' === isSmsClient.toUpperCase())
+				if(isSmsClient(doc.orgname))
 				{
 
 					try{
-					 	var response = Meteor.call('smsOrderReceived', doc, clientPhoneNumberText, 'client');
+					 	var response = Meteor.call('smsOrderReceived', doc, clientPhoneNumberText(doc.orgname), 'client');
 					 	for(var key in response.result)
 					 	{
 					 		console.log(key + ' = ' + response.result[key]);
@@ -563,11 +577,11 @@ OrdersMeta.after.insert(function (userId, doc) {
 
 				processStatus.sms.smsClient = smsClient;
 
-				if('YES' === isSmsWebmaster.toUpperCase())
+				if(isSmsWebmaster(doc.orgname))
 				{
 
 					try{
-					 	var response = Meteor.call('smsOrderReceived', doc, webmasterPhoneNumberText,'webmaster');
+					 	var response = Meteor.call('smsOrderReceived', doc, webmasterPhoneNumberText(doc.orgname),'webmaster');
 					 	for(var key in response.result)
 					 	{
 					 		console.log(key + ' = ' + response.result[key]);

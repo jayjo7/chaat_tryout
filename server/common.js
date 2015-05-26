@@ -1,56 +1,291 @@
 // Items that need to be move to config file
 isPaymentEnabled        = function(orgname)
-                           {
-                              return 'yes';
-                            }
-isPaymentStripe			    = function(orgname) 
                           {
-                            return 'yes';
+                            if('ENABLED' === Meteor.settings.public[orgname].onlinePayment.toUpperCase())
+                              return 'yes';
+                          };
+
+isPaymentStripe         = function(orgname) 
+                          {
+                              if('STRIPE' === Meteor.settings.public[orgname].paymentProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
+
+isPaymentSquare         = function(orgname) 
+                          {
+                              if('SQUARE' === Meteor.settings.public[orgname].paymentProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
+
+isPaymentBrainTree      = function(orgname) 
+                          {
+                              if('BRAINTREE' === Meteor.settings.public[orgname].paymentProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
+
+stripePrivateKey        = function(orgname)
+                          {
+                            return Meteor.settings.private[orgname]. privateKey;
+                          };
+
+stripeApiVersion        = function(orgname)
+                          {
+                            return Meteor.settings.private[orgname]. apiVersion;
+                          };
+
+isSmsEnabled            = function(orgname)
+                          {
+                            if('ENABLED' === Meteor.settings.private[orgname].sms.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                          };
+
+isSmsWebmaster        = function(orgname)
+                          {
+                            if('ENABLED' === Meteor.settings.private[orgname].smsWebmaster.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                          };
+
+webmasterPhoneNumberText= function(orgname)
+                          {
+                            return Meteor.settings.private[orgname]. smsWebmaterPhoneNumber;
+                          };
+
+isSmsClient             = function(orgname)
+                          {
+                            if('ENABLED' === Meteor.settings.private[orgname].smsClient.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                          };
+
+clientPhoneNumberText    = function(orgname)
+                           { 
+                                return Meteor.settings.private[orgname]. smsClientPhoneNumber;
+                           };  
+
+
+isSmsTwilio             =  function(orgname)
+                           {
+
+                            if('TWILIO' === Meteor.settings.private[orgname].smsProcessor.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+
+                           };
+
+twilioAccountSID      = function(orgname)
+                        {
+                            return Meteor.settings.private[orgname].twilio.accountSID;
+                        }
+twilioAuthToken       = function(orgname)
+                        {
+                            return Meteor.settings.private[orgname].twilio.authToken;
+                        }
+twilioFromPhoneNumber = function(orgname)
+                        {
+                            return Meteor.settings.private[orgname].twilio.phoneNumber;
+                        }
+
+isEmailEnabled          = function(orgname)
+                          {
+                            if('ENABLED' === Meteor.settings.private[orgname].email.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                          };
+
+isEmailMailgun          = function(orgname) 
+                          {
+                              if('MAILGUN' === Meteor.settings.private[orgname].emailProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
+
+mailGunApiKey         = function(orgname)
+                        {
+                            return Meteor.settings.private[orgname].mailgun.apiKey;
+                        }
+mailGunDomain         = function(orgname)
+                        {
+                            return Meteor.settings.private[orgname].mailgun.domainName;
+                        }
+
+isEmailSendgrid         = function(orgname) 
+                          {
+                              if('SENDGRID' === Meteor.settings.private[orgname].emailProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
+
+
+fromEmailAddress        = function(orgname)
+                          {
+                              return Meteor.settings.private[orgname].emailFromAddress;
                           }
-                      
-isPaymentSquare			    = 'no';
-ispaymnetBrainTree		  = 'no';
 
-isSmsEnabled            = 'yes';
-isSmsTwilio             = 'yes';
+isClientEmailOrderReceived  = function(orgname)
+                              {
+                                if('ENABLED' === Meteor.settings.private[orgname].emailClient.toUpperCase())
+                                {
+                                  return true;
+                                }
+                                else
+                                {
+                                  return false;
+                                }
+                              };
+clientEmailAddress          = function(orgname)
+                          {
+                              return Meteor.settings.private[orgname].emailClientAddress;
+                          }
 
-isEmailEnabled          = 'yes';
-isEmailMailgun          = 'yes';
-isEmailSendgrid			    = 'no';
+webmasterEmailAddress   = function(orgname)
+                          {
+                              return Meteor.settings.private[orgname].emailWebmasterAddress;
+                          }
+isEmailWebmaster        = function(orgname)
+                          {
+                            if('ENABLED' === Meteor.settings.private[orgname].emailWebmaster.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                          };                      
 
-isOrderSystemEnabled    = 'no';
-isOrderSystemClover     = 'no';
-isOrderSystemSquare	    = 'no';
-isOrderSystemLightSpeed	= 'no';
 
-isPrinterEnabled		    = 'no';
+isOrderSystemEnabled    = function(orgname)
+                          {
+                            if('ENABLED' === Meteor.settings.private[orgname].orderSystem.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                          };     
 
-gmt_offset              = -7;
 
-fromEmailAddress      	= 'ChowpattyChaat@thewebsheets.com';
+isOrderSystemClover     = function(orgname) 
+                          {
+                              if('CLOVER' === Meteor.settings.public[orgname].orderProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
+isOrderSystemSquare	    = function(orgname) 
+                          {
+                              if('SQUARE' === Meteor.settings.public[orgname].orderProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
+isOrderSystemLightSpeed	= function(orgname) 
+                          {
+                              if('LIGHTSPEED' === Meteor.settings.public[orgname].orderProcessor.toUpperCase())
+                              {
+                                  return true;
+                              }
+                              else
+                              {
+                                  return false;
+                              }
+                          };
 
-webmasterEmailAddress 	= 'jayjo7@hotmail.com';
-webmasterPhoneNumberText= '425-777-6970';
-isEmailWebmaster        = 'yes';
+isPrinterEnabled		    = function(orgname)
+                          {
+                            if('ENABLED' === Meteor.settings.private[orgname].printer.toUpperCase())
+                            {
+                              return true;
+                            }
+                            else
+                            {
+                              return false;
+                            }
+                          };            
 
-clientEmailAddress          = 'jayjo7@hotmail.com';
-isClientEmailOrderReceived  = 'yes';
-clientPhoneNumberText       = '425-777-6970';
+gmtOffset              = function(orgname)
+                          {
+                            return  Meteor.settings.public[orgname].gmtOffset;
+                          };
 
-mailGunApiKey         = 'key-1180c0836cb719598c0d9448c0a9f400';
-mailGunDomain			    = 'thewebsheets.com';
+orgCountryCode              = function(orgname)
+                          {
+                            return  Meteor.settings.public[orgname].countryCode;
+                          };                          
 
-stripePrivateKey		  = 'sk_test_X1Qg62lGhGHpGlZdeWrlbPAs';
-stripeApiVersion		  = '2015-04-07';
+websheetsUrl          = function(orgname)
+                          {
+                            return  Meteor.settings.private[orgname].websheetsUrl;
+                          };
 
-websheetsUrl          = 'https://script.google.com/macros/s/AKfycbwWp0DVVcDEtGzrAf7H4x5DHfgP70r-3asuXzRg3orsH1NFfrY/exec';
 
-twilioAccountSID      = 'ACbe19d2ad2460272ef1ecab898b20d0f3'
-twilioAuthToken	      = 'f96be70770ddf5a49abb121416769dc8';
-twilioFromPhoneNumber	= '+14252767772'
 
-isSmsWebmaster        = 'yes'
-isSmsClient           = 'yes';
+
 
 Meteor.methods({
 
@@ -88,9 +323,10 @@ Meteor.methods({
   },
 
 
-  getLocalTime:function()
+  getLocalTime:function(orgname)
   {
-      return moment().utcOffset(Number(gmt_offset)).format('MM/DD/YYYY hh:mm:ss A');
+      console.log('getLocalTime: orgname = ' + orgname );
+      return moment().utcOffset(gmtOffset(orgname)).format('MM/DD/YYYY hh:mm:ss A');
 
   }
 

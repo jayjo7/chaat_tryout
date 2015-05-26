@@ -1,12 +1,65 @@
+
 {
-  "public": {
-    "stripe": {
-      "stripePublicKey": "pk_test_1J0fGPuQStfrSiv6P1L5p8lz"
+  "public": 
+  {
+    "chowpaatychaat" : 
+    {
+      "countryCode" : "US",
+      "gmtOffset"		: "-7",	
+      "onlinePayment"	: "disabled",
+      "paymentProcessor":"stripe",
+      "stripe": 
+      {
+        "publicKey"		: "pk_test_1J0fGPuQStfrSiv6P1L5p8lz"
+      }
     }
   },
-  "private": {
-    "stripe": {
-      "stripePrivateKey": "sk_test_X1Qg62lGhGHpGlZdeWrlbPAs"
+
+
+  "private": 
+  {
+    "chowpaatychaat" : 
+    {
+
+      "stripe": 
+      {
+        "privateKey"  : "sk_test_X1Qg62lGhGHpGlZdeWrlbPAs",
+        "apiVersion"  : "2015-04-07"
+
+      },
+
+      "sms"           : "enabled",
+      "smsClient"	  : "enabled",
+      "smsWebmaster"  : "enabled",
+      "smsProcessor"  : "twilio",
+      "smsWebmaterPhoneNumber" : "425-777-6970",
+      "smsClientPhoneNumber": "425-777-6970",
+
+      "twilio":
+      {
+      	"accountSID"  :	"ACbe19d2ad2460272ef1ecab898b20d0f3",
+      	"authToken"   :	"f96be70770ddf5a49abb121416769dc8",
+      	"phoneNumber" :	"+14252767772"
+      },
+      "email"	            : "enabled",
+      "emailClient"         : "enabled",
+      "emailWebmaster"      : "enabled",
+      "emailProcessor"      : "mailgun",
+      "emailFromAddress"    : "ChowpattyChaat@thewebsheets.com",
+      "emailClientAddress"   : "jayjo7@hotmail.com",
+      "emailWebmasterAddress" :  "jayjo7@hotmail.com",
+      "mailgun":
+      {
+      	"apiKey"		: "key-1180c0836cb719598c0d9448c0a9f400",
+      	"domainName" 		: "thewebsheets.com"
+      },
+      "printer"			: "enabled",
+      "orderSystem"		: "enabled",
+      "orderProcessor"  : "nothing",
+
+      "websheetsUrl": "https://script.google.com/macros/s/AKfycbwWp0DVVcDEtGzrAf7H4x5DHfgP70r-3asuXzRg3orsH1NFfrY/exec"
+      
+      
     }
   }
 }

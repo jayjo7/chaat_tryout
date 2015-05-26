@@ -1,18 +1,19 @@
 //var secret = Meteor.settings.private.stripe.testSecretKey;
-var client = Meteor.npmRequire('twilio')(twilioAccountSID, twilioAuthToken );
-var Future = Npm.require('fibers/future');
-var Fiber  = Npm.require('fibers');
+    var Future = Npm.require('fibers/future');
+    var Fiber  = Npm.require('fibers');
+    var client;
 
 Meteor.methods({
 
     smsOrderReceived :function (order, toPhoneNumber, whoReceiving)
     {
 
+        client = Meteor.npmRequire('twilio')(twilioAccountSID(order.orgname), twilioAuthToken (order.orgname));
         var response = {};
         var CLIENT_NAME;
         var body ;
         var ORDER_STATUS_URL      = Meteor.absoluteUrl('os', {replaceLocalhost:true})+ "/";
-        console.log('smsOrderReceived: ORDER_STATUS_URL = ' +ORDER_STATUS_URL);   
+        console.log(order.sessionId + ': smsOrderReceived: ORDER_STATUS_URL = ' +ORDER_STATUS_URL);   
 
         switch (whoReceiving)
         {
@@ -23,7 +24,7 @@ Meteor.methods({
 
                 body      = 'New Order[' + order.OrderNumber + '] \n';
                 body     += order.Items + '\n';
-                body     +=   ORDER_STATUS_URL + order.UniqueId;
+                body     += ORDER_STATUS_URL + order.UniqueId;
 
               break;
 
@@ -31,7 +32,7 @@ Meteor.methods({
             
 
                 CLIENT_NAME           = Meteor.call('getSetting','store_name', order.orgname);
-                console.log('smsOrderReceived: CLIENT_NAME = ' +CLIENT_NAME); 
+                console.log(order.sessionId + ': smsOrderReceived: CLIENT_NAME = ' +CLIENT_NAME); 
                 
                 body      = 'Received Order[' + order.OrderNumber + '] \n';
                 body     += order.Items + '\n';
@@ -40,29 +41,31 @@ Meteor.methods({
 
         }
 
-
         try{
           var result = sendSMS (  
                     order.sessionId,
                     order.OrderNumber,
                     toPhoneNumber, 
-                    body
+                    body,
+                    order.orgname
                   );
 
          response.result = result;
 
         for(var key in response.result)
         {
-              console.log(key + ' = ' + response.result[key]);
+              console.log(order.sessionId +": smsOrderReceived : " +key + ' = ' + response.result[key]);
               //smsCustomer[key] = response.result[key];
         }
 
         }catch(e)
         {
 
-          console.log(order.sessionId +': smsOrderReceived : Trouble sending sms to the customer' + e);
-          response.status = STATUS_FATAL;
-          response.error = e.toString();
+          console.log(order.sessionId +': smsOrderReceived : Trouble sending sms to the customer ' + e);
+          var result ={};
+          result.status = STATUS_FATAL;
+          result.error = e.toString();
+          response.result = result;
 
         }
 
@@ -74,7 +77,7 @@ Meteor.methods({
 
     smsOrderReady:function (order)
     {
-
+         client = Meteor.npmRequire('twilio')(twilioAccountSID(order.orgname), twilioAuthToken (order.orgname));
          var body = 'Order[' +order.OrderNumber + '] is ready - DosaHouse \n' + ORDER_STATUS_URL + order.UniqueId;
          sendSMS (  order.OrderNumber,
                     order.CustomerPhone, 
@@ -84,13 +87,27 @@ Meteor.methods({
 
 });
 
-var sendSMS = function (sessionId, orderNumber, toPhoneNumber, bodyMessage) {
+var sendSMS = function (sessionId, orderNumber, toPhoneNumber, bodyMessage, orgname) {
 
-    console.log("sendSMS : twilioAccountSID       = "   +  twilioAccountSID );
-    console.log("sendSMS : twilioAuthToken        = "   +  twilioAuthToken);
-    console.log("sendSMS : twilioFromPhoneNumber  = "   +  twilioFromPhoneNumber);
-    console.log("sendSMS : toPhoneNumber          = "   +  toPhoneNumber);
-    console.log("sendSMS : bodyMessage            = "   +  bodyMessage);
+    var orgTwilioFromPhoneNumber = twilioFromPhoneNumber(orgname);
+    console.log(sessionId +": sendSMS : twilioAccountSID          = "   +  twilioAccountSID(orgname) );
+    console.log(sessionId +": sendSMS : twilioAuthToken           = "   +  twilioAuthToken(orgname));
+    console.log(sessionId +": sendSMS : orgTwilioFromPhoneNumber  = "   +  orgTwilioFromPhoneNumber);
+    console.log(sessionId +": sendSMS : toPhoneNumber             = "   +  toPhoneNumber);
+    console.log(sessionId +": sendSMS : bodyMessage               = "   +  bodyMessage);
+    //var toPhoneNumberE164 = Phoneformat.formatE164('US', '4257776970');
+    //var toPhoneNumberE164           = Phoneformat.formatE164(countryCode( orgname), toPhoneNumber);
+    //console.log(sessionId +": sendSMS : toPhoneNumberE164      = "   +  toPhoneNumberE164);
+    //var countryCode = orgCountryCode( orgname);
+    //console.log(sessionId +": sendSMS : countryCode      = "   +  countryCode);
+
+
+    //var toPhoneNumberE164           = Phoneformat.formatE164(countryCode, toPhoneNumber);
+    //console.log(sessionId +": sendSMS : toPhoneNumberE164      = "   +  toPhoneNumberE164);
+
+    //var twilioFromPhoneNumberE164   = Phoneformat.formatE164(countryCode, twilioFromPhoneNumber((orgname)));
+    //console.log(sessionId +": sendSMS : twilioFromPhoneNumberE164  = "   +  twilioFromPhoneNumberE164);
+
 
     var result ={};
 
@@ -98,7 +115,7 @@ var sendSMS = function (sessionId, orderNumber, toPhoneNumber, bodyMessage) {
       client.messages.create({
 
                           to    : toPhoneNumber, 
-                          from  : twilioFromPhoneNumber,
+                          from  : orgTwilioFromPhoneNumber,
                           body  : bodyMessage
 
                         }, Meteor.bindEnvironment (function (error, message)
@@ -130,7 +147,7 @@ var sendSMS = function (sessionId, orderNumber, toPhoneNumber, bodyMessage) {
                                 console.log(sessionId + " : Done Invoking sms - No Error");
 
                               }
-                            console.log("sendSMS: result = " + result)  ;
+                            console.log(sessionId +": sendSMS: result = " + result)  ;
                             smsMessage.return(result);
                         }));
 
