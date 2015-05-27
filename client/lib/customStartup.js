@@ -1,3 +1,5 @@
+ORG_NAME_SESSION_KEY    ='websheets_orgName';
+ORG_NAME                = Meteor.settings.public.orgCode.default;
 
 Meteor.startup(function() {
 

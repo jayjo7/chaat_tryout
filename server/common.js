@@ -43,12 +43,12 @@ isPaymentBrainTree      = function(orgname)
 
 stripePrivateKey        = function(orgname)
                           {
-                            return Meteor.settings.private[orgname]. privateKey;
+                            return Meteor.settings.private[orgname].stripe. privateKey;
                           };
 
 stripeApiVersion        = function(orgname)
                           {
-                            return Meteor.settings.private[orgname]. apiVersion;
+                            return Meteor.settings.private[orgname]. stripe. apiVersion;
                           };
 
 isSmsEnabled            = function(orgname)

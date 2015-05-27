@@ -8,25 +8,30 @@ Meteor.methods({
         initializeMailGun(order.orgname);
         var response      =   {};
         response.status   =   STATUS_SUCCESS;
-        var CLIENT_NAME      = Meteor.call('getSetting','store_name', order.orgname);
-        var subject       =    'Credit Card declined - ' + CLIENT_NAME ; 
+        var CLIENT_NAME   =   Meteor.call('getSetting','store_name', order.orgname);
+        var subject       =   'Credit Card declined - ' + CLIENT_NAME ; 
         var body          =   Meteor.call('getSetting','order_status_alert_message' , order.orgname) + '\n\n' + buildOrderReceivedBody(order);
 
         //Send Email to customer
         try{
-            sendEmail.send({
+            var result = sendEmail.send({
                                      'to'     :   order.CustomerEmail,
-                                     'from'   :   fromEmailAddress ,
-                                     'bcc'    :   clientEmailAddress,
+                                     'from'   :   fromEmailAddress(order.orgname) ,
+                                     'bcc'    :   clientEmailAddress (order.orgname),
                                      'text'   :   body,
                                      'subject':   subject
 
                                  });
+            response.result = result;
+            console.log(order.sessionId +": emailOrderReceived : result received from vendor: " +JSON.stringify(response.result, null, 4));
+
         }catch(e)
         {
           console.log('sendCCAuthFailedNotification: Trouble sending email to the customer' + e);
-          response.status   =   STATUS_FAILED;
-          response.error    =   e.toString();
+          var result ={};
+          result.status = STATUS_FATAL;
+          result.error = e.toString();
+          response.result = result;
         }
 
       return response;

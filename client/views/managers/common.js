@@ -1,6 +1,3 @@
-ORG_NAME_SESSION_KEY 	='websheets_orgName';
-ORG_NAME 				='chowpaatychaat';
-
 Template.registerHelper('getSettings', function(key)
 {
 	var orgname = Session.get(ORG_NAME_SESSION_KEY);

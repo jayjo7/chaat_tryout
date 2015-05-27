@@ -107,6 +107,7 @@ Meteor.methods({
 			order.orgname     		= orgname;
 			order.sessionId 		= sessionId;
 			order.Status 			= STATE_ONE;
+			order.StatusCode		= STATE_CODE_ONE;
 			order.OrderNumber 		= sequence.orderNumber;
 			order.UniqueId 			= sequence._id;
 			order.TimeOrderReceived = Meteor.call('getLocalTime', orgname );
@@ -306,13 +307,13 @@ OrdersMeta.after.insert(function (userId, doc) {
 			if( result.error)
 			{
 				doc.Payment='Charge Failed';
-				var orderStatusAlertMessage = Meteor.call('getSetting', 'order_status_alert_message');
+				var orderStatusAlertMessage = Meteor.call('getSetting', 'order_status_alert_message', doc.orgname);
 				Orders.update({UniqueId:doc.UniqueId}, {$set: {Payment: doc.Payment, orderStatusAlert:orderStatusAlertMessage}});
 				OrdersMeta.update({UniqueId:doc.UniqueId}, {$set: {Payment: doc.Payment, orderStatusAlert:orderStatusAlertMessage}});
 				console.log(doc.sessionId + ": Jay:Todo:Send appropriate notifciation to customer and owner");
 				payment.status 	= STATUS_FAILED;
 				payment.error 	= result.error;
-				var result = Meteor.call('sendCCAuthFailedNotification', doc);
+				var response = Meteor.call('sendCCAuthFailedNotification', doc);
 				payment.declineNotification = new Object();;
 				for(var key in response)
 				{

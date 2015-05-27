@@ -1,6 +1,4 @@
 //var secret = Meteor.settings.private.stripe.testSecretKey;
-var Stripe = Meteor.npmRequire('stripe')(stripePrivateKey);
-Stripe.setApiVersion(stripeApiVersion);
 var Future = Npm.require('fibers/future');
 var Fiber  = Npm.require('fibers');
 
@@ -9,10 +7,10 @@ Meteor.methods({
 
 	stripeAuthAndCharge: function(order)
 	{
+    var Stripe = Meteor.npmRequire('stripe')(stripePrivateKey(order.orgname));
+    Stripe.setApiVersion(stripeApiVersion(order.orgname));
 
-		var currencyCode = orgCurrencyCode(order.orgname);
-		console.log(order.sessionId + " :currencyCode = " + currencyCode.Value);
-	
+		var currencyCode = orgCurrencyCode(order.orgname);	
 		for(var key in order.cardToken)
         {
         	console.log(order.sessionId + " :CardToken: " +key + " = " +order.cardToken[key]);
@@ -27,9 +25,9 @@ Meteor.methods({
         orderTotalCents = Number(orderTotalCents).toFixed(2);
         console.log(order.sessionId + " :To Payment system: orderTotalCents before replace= "    		+ orderTotalCents);
         orderTotalCents     = orderTotalCents.toString().replace('.','');
-        console.log(order.sessionId + " :To Payment system: orderTotalCents 	= " 	+ orderTotalCents);
-        console.log(order.sessionId + " :To Payment system: currencyCode.Value 	= " 	+ currencyCode.Value);
-        console.log(order.sessionId + " :To Payment system: order.cardToken.id   = "    	+ order.cardToken.id);
+        console.log(order.sessionId + " :To Payment system: orderTotalCents     = " 	+ orderTotalCents);
+        console.log(order.sessionId + " :To Payment system: currencyCode  = " 	+ currencyCode);
+        console.log(order.sessionId + " :To Payment system: order.cardToken.id  = "    	+ order.cardToken.id);
 
         	    //var idempotency_key = sequence._id +":"+sequence.orderNumber;
         	    //console.log(sessionId + " :To Payment system: idempotency_key  = " 		+ idempotency_key);
@@ -43,7 +41,7 @@ Meteor.methods({
 
 		Stripe.charges.create({
   								amount: orderTotalCents,
-  								currency: currencyCode.Value,
+  								currency: currencyCode,
   								source: order.cardToken.id, // obtained with Stripe.js
   								description: toPaymentDescription,
   								metadata: {'OrderNumber': order.OrderNumber}
