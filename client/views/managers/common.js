@@ -34,7 +34,7 @@ Template.registerHelper('getSettingsMulti', function(key)
 	var orgname = Session.get(ORG_NAME_SESSION_KEY);
 
 	//console.log('getSettingsMulti:key = ' + key)
-	var result = Settings.find({$and : [{Key: key}, {orgname:orgname}, {Value : {"$exists" : true, "$ne" : ""}}]});
+	var result = Settings.find({$and : [{Key: key}, {orgname:orgname}, {Value : {"$exists" : true, "$ne" : ""}}]},{sort:{sheetRowId: 1}});
 		//console.log('getSettingsMulti:Value = ' + result.Value)
 
 	return result

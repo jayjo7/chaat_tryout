@@ -3,6 +3,58 @@
 
 Meteor.methods({
 
+    emailOrderReady:function (sessionId, order, whoReceiving)
+    {
+
+      initializeMailGun(order.orgname);
+      var response      = {};
+      response.status   = STATUS_SUCCESS;
+      var body          = buildOrderReadyBody(sessionId, order);
+      var toEmailAddress;
+      var subject     = 'Your Order [' + order.OrderNumber  + '] is ready.';
+
+      switch (whoReceiving)
+      {
+
+          case WEBMASTER:
+                toEmailAddress      = webmasterEmailAddress (order.orgname);
+                break;
+
+          default:
+            
+                toEmailAddress  =  order.CustomerEmail;
+
+
+      }
+
+              //Send Email to customer
+        try{
+            var result = sendEmail.send({
+                                     'to'     :   toEmailAddress,
+                                     'from'   :   fromEmailAddress(order.orgname),
+                                     'text'   :   body,
+                                     'subject':   subject
+
+                                 });
+            response.result = result;
+              
+            console.log(sessionId +": emailOrderReady : result received from vendor: " +JSON.stringify(response.result, null, 4));
+
+                       
+        }catch(e)
+        {
+          console.log(sessionId + ': emailOrderReady: Trouble sending email to the customer' + e);
+          var result ={};
+          result.status = STATUS_FATAL;
+          result.error = e.toString();
+          response.result = result;
+        }
+
+      return response;  
+
+
+    },
+
     sendCCAuthFailedNotification:function(order)
     {
         initializeMailGun(order.orgname);
@@ -45,18 +97,19 @@ Meteor.methods({
       response.status   = STATUS_SUCCESS;
       var body          = buildOrderReceivedBody(order);
       var toEmailAddress;
+      var subject;
 
       switch (whoReceiving)
-        {
+      {
 
-          case 'client':
+          case CLIENT:
               toEmailAddress      = clientEmailAddress (order.orgname);
               var CLIENT_NAME     = Meteor.call('getSetting','store_name' , order.orgname);
               subject = 'Owner ' +  CLIENT_NAME+': Received Order [' + order.OrderNumber + ']';
 
               break;
 
-          case 'webmaster':
+          case WEBMASTER:
               toEmailAddress      = webmasterEmailAddress (order.orgname);
               var CLIENT_NAME     = Meteor.call('getSetting','store_name' , order.orgname);
               subject = 'Owner ' +  CLIENT_NAME+': Received Order [' + order.OrderNumber + ']';
@@ -65,11 +118,11 @@ Meteor.methods({
 
           default:
             
-              var subject     = 'Your Order [' + order.OrderNumber + ']';
+              subject     = 'Your Order [' + order.OrderNumber + ']';
               toEmailAddress  =  order.CustomerEmail;
 
 
-        }
+      }
 
               //Send Email to customer
         try{
@@ -172,6 +225,54 @@ var buildOrderReceivedBody = function(order)
       
       body = body + '\n\n' + 'Auto generated, please do not reply to this email. If needed please email ' + clientEmailAddress(order.orgname);
       console.log(order.sessionId + ' :buildOrderReceivedBody:body = ' + body);
+      return body;
+
+}
+
+
+var buildOrderReadyBody = function(sessionId,order)
+{
+
+    var CLIENT_PHONE_NUMBER   = Meteor.call('getSetting', 'phone_number'  , order.orgname);
+    //console.log('buildOrderReceivedBody: CLIENT_PHONE_NUMBER = ' +CLIENT_PHONE_NUMBER);
+    var CLIENT_ADDRESS        = Meteor.call('getSetting', 'address' , order.orgname);
+    //console.log('buildOrderReceivedBody: CLIENT_ADDRESS = ' +CLIENT_ADDRESS);    
+    var CLIENT_NAME           = Meteor.call('getSetting','store_name' , order.orgname);
+    //console.log('buildOrderReceivedBody: CLIENT_NAME = ' +CLIENT_NAME);    
+    var EMAIl_CUSTOM_MESSAGE     = Meteor.call('getSetting','email_custom_message' , order.orgname);
+    //console.log('buildOrderReceivedBody: EMAIl_CUSTOM_MESSAGE  = ' +EMAIl_CUSTOM_MESSAGE );    
+    var ORDER_STATUS_URL      = Meteor.absoluteUrl('os', {replaceLocalhost:true}) + "/";
+    //console.log('buildOrderReceivedBody: ORDER_STATUS_URL = ' +ORDER_STATUS_URL);
+
+          var body= 'Your order #  [' + order.OrderNumber + '] is ready to be picked up any time now -' +'\n\n' ;
+          //body = body + 'Received at : ' + order.TimeOrderReceived+ '\n\n';
+          body = body + order.Items + '\n\n';
+        
+        
+          body = body + 'Call us at: ' + CLIENT_PHONE_NUMBER +', if you need direction.' + '\n\n';
+      
+      
+          body = body + 'Pickup Address:'+ '\n\n';
+      
+      
+          body = body + CLIENT_ADDRESS+ '\n\n';
+            
+
+      
+           body = body + 'See you soon!'+ '\n';
+           body = body + '- ' +  CLIENT_NAME + '\n';
+           
+           body = body + "\n\n";
+        
+          body = body + 'Check the current status at:\n';
+          body = body +  ORDER_STATUS_URL + order.UniqueId;
+      
+       if(EMAIl_CUSTOM_MESSAGE)
+      {
+        body = body + '\n\n\n' + EMAIl_CUSTOM_MESSAGE;
+      }
+      body = body + '\n\n' + 'Auto generated, please do not reply to this email. If needed please email ' + clientEmailAddress(order.orgname);
+      console.log(sessionId + ' :buildOrderReceivedBody:body = ' + body);
       return body;
 
 }

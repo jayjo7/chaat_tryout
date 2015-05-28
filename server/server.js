@@ -92,7 +92,14 @@ Meteor.methods({
    	
 	},
 
-	orderItems:function(sessionId, contactInfo, sequence, orgname, cardToken, callback){
+	updateOrderStatus: function(sessionId, orgname, UniqueId, statusCode)
+	{
+
+
+	},
+
+	orderItems:function(sessionId, contactInfo, sequence, orgname, cardToken, callback)
+	{
 
 			console.log(sessionId + ' :In OrderItems');
 			console.log(sessionId + ' :orgname = ' + orgname);
@@ -232,8 +239,17 @@ Meteor.methods({
 			   	Orders.insert(order);
 			   	console.log(sessionId + " :Order insert complete" );
 
-			   	OrdersMeta.insert(order, function(error, result){
-			   		console.log("In OrdersMeta callback");
+			   	OrdersMeta.insert(order, function(error, doc){
+			   		if(error)
+			   		{
+			   			console.log(sessionId + " : Error inserting OrdersMet : "  + error);
+
+			   		}
+			   		else
+			   		{
+			   			console.log(sessionId + " : Done with inserting OrdersMeta")
+			   		}
+
 			   	});
 			   	console.log(sessionId + " :OrdersMeta insert complete" );
 
@@ -345,10 +361,11 @@ OrdersMeta.after.insert(function (userId, doc) {
 	try{
 	  		var count = 0;
 	  		processStatus.websheets.status 	= STATUS_SUCCESS;
+	  		var response;
 	  		do
 	  		{
 	  			count +=1;
-	  			var response = Meteor.call('postWebsheets', doc);
+	  			response = Meteor.call('postWebsheets', doc);
 	  			console.log(doc.sessionId + ": attempted count = " + count );
 	  		}while (count < WEBSHEETS_MAX_RETRY && response.statusCode !== 200)
 
@@ -356,6 +373,12 @@ OrdersMeta.after.insert(function (userId, doc) {
 	  		{
 	  			console.log(doc.sessionId + ": Jay Todo: Send Email Notification to Webmaster and Owner");
 	  			processStatus.websheets.status 	= STATUS_FAILED;
+	  		}
+	  		else
+	  		{
+	  			processStatus.websheets.response  = response ;
+	  			Orders.update({UniqueId:doc.UniqueId},     {$set: {sheetRowId : response.data.sheetRowId, sheetColumnId:response.data.sheetColumnId}});
+				OrdersMeta.update({UniqueId:doc.UniqueId}, {$set: {sheetRowId : response.data.sheetRowId, sheetColumnId:response.data.sheetColumnId}});
 	  		}
 	 }catch(e)
 	 {
@@ -380,7 +403,7 @@ OrdersMeta.after.insert(function (userId, doc) {
 			 	{
 
 			 		try{
-					 	var response = Meteor.call('emailOrderReceived', doc, 'customer');
+					 	var response = Meteor.call('emailOrderReceived', doc, CUSTOMER);
 					    console.log(JSON.stringify(response, null, 4));
 
 					 	for(var key in response)
@@ -419,7 +442,7 @@ OrdersMeta.after.insert(function (userId, doc) {
 			 	{
 
 			 		try{
-					 	var response = Meteor.call('emailOrderReceived', doc, 'client');
+					 	var response = Meteor.call('emailOrderReceived', doc, CLIENT);
 					 	for(var key in response)
 					 	{
 					 		emailClient [key] = response[key];
@@ -452,7 +475,7 @@ OrdersMeta.after.insert(function (userId, doc) {
 			 	if(isEmailWebmaster(doc.orgname))
 			 	{
 			 		try{
-					 	var response = Meteor.call('emailOrderReceived', doc, 'webmaster');
+					 	var response = Meteor.call('emailOrderReceived', doc, WEBMASTER);
 					 	for(var key in response)
 					 	{
 					 		emailWebmaster [key] = response[key];
@@ -495,7 +518,7 @@ OrdersMeta.after.insert(function (userId, doc) {
 
 	}
 
- 	console.log(doc.sessionId + ": Done sending email");
+ 	console.log(doc.sessionId + ": Done sending initial order email");
 	//Ens Sending the Email
 
 	//Start Sending the SMS
@@ -566,7 +589,7 @@ OrdersMeta.after.insert(function (userId, doc) {
 				{
 
 					try{
-					 	var response = Meteor.call('smsOrderReceived', doc, webmasterPhoneNumberText(doc.orgname),'webmaster');
+					 	var response = Meteor.call('smsOrderReceived', doc, webmasterPhoneNumberText(doc.orgname),WEBMASTER);
 					 	for(var key in response.result)
 					 	{
 					 		console.log(key + ' = ' + response.result[key]);
@@ -607,20 +630,8 @@ OrdersMeta.after.insert(function (userId, doc) {
  		processStatus.sms.status 	=	STATUS_NOT_ENABLED;
 	}
 
- 	console.log(doc.sessionId + ": Done sending sms");	
+ 	console.log(doc.sessionId + ": Done sending inital order sms");	
 	//End Sending the SMS
-
-
-
-
-
-
- 
-
-
-
-
-
 
 
  	//Jay:TODO: Examine the processStatus object and handle it appropriately,

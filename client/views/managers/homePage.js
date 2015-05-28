@@ -218,7 +218,7 @@ Template.homePage.helpers({
         var orgname = Session.get(ORG_NAME_SESSION_KEY);
         console.log('menu: ' + orgname);
 
-		return Menu.find({$and : [{Category: categoryMenu}, {orgname:orgname}, {Name : {"$exists" : true, "$ne" : ""}}]});
+		return Menu.find({$and : [{Category: categoryMenu}, {orgname:orgname}, {Name : {"$exists" : true, "$ne" : ""}}]},{sort:{sheetRowId: 1}});
 
 	},
 

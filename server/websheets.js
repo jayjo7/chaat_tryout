@@ -5,7 +5,7 @@ Meteor.methods({
 	{
 		var response ={};
     var sheetsUrl = websheetsUrl(doc.orgname);
-    console.log(doc.sessionId + ": postWebsheets:sheetsUrl: " + sheetsUrl);
+    //console.log(doc.sessionId + ": postWebsheets:sheetsUrl: " + sheetsUrl);
 		 try{
   				
   			response = HTTP.post(sheetsUrl,
@@ -14,16 +14,19 @@ Meteor.methods({
   					followAllRedirects: true
   				});
 
-  			for (var key in response)
-  			{
-  				console.log(doc.sessionId + ": postWebsheets:response:" + key + " = " + response[key]);
-  			}
+        console.log(doc.sessionId +": postWebsheets:response:: " +JSON.stringify(response, null, 4));
+
   			console.log(doc.sessionId + ": postWebsheets:Done invoking HTTP.Post to websheets");
 
   			if(response.statusCode != 200)
   			{
   				console.log('postWebsheets-Failed', 'Order posting to websheets failed with http status code [' + response.statusCode  + ']', e);
   			}
+        else
+        {
+            console.log(doc.sessionId +": postWebsheets:response.content:: " +JSON.stringify(response.content, null, 4));
+
+        }
 
 							
 		}catch (e)

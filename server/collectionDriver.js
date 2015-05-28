@@ -9,7 +9,7 @@ CollectionDriver = function(db) {
 };
 
 CollectionDriver.prototype.getCollection = function(collectionName, callback) {
-    console.log("collectionName = " + collectionName);
+    //console.log("collectionName = " + collectionName);
     MongoClient.connect(mongodb_url, {native_parser:true}, function(err, db) 
     {
         if(err)
@@ -18,8 +18,8 @@ CollectionDriver.prototype.getCollection = function(collectionName, callback) {
             console.log("Trouble connecting to the database ...");
         }
         else
-        {   console.log("Connected to " + mongodb_url);
-            console.log("Connected to the database sucessfully ...");
+        {   //console.log("Connected to " + mongodb_url);
+            //console.log("Connected to the database sucessfully ...");
             db.collection(collectionName, function(error, the_collection) {
             if( error ) callback(error);
             else callback(null, the_collection);
@@ -130,7 +130,7 @@ CollectionDriver.prototype.update = function(collectionName, obj, entityId, call
 //update a specific object
 CollectionDriver.prototype.upsert = function(collectionName, obj, uniqueIdName, orgName,  callback) 
 {
-    console.log("trying to connect to mongodb...")
+    //console.log("trying to connect to mongodb...")
     this.getCollection(collectionName, function(error, the_collection) 
     {
         if (error) 
@@ -140,8 +140,8 @@ CollectionDriver.prototype.upsert = function(collectionName, obj, uniqueIdName, 
         else 
         {
 
-        	console.log("obj[" + uniqueIdName +"] = " + obj[uniqueIdName]);
-            console.log("obj[" + orgName +"] = " + obj[orgName]);
+        	//console.log("obj[" + uniqueIdName +"] = " + obj[uniqueIdName]);
+            //console.log("obj[" + orgName +"] = " + obj[orgName]);
 
         	var queryObject            = {};
         	queryObject[uniqueIdName]  = obj[uniqueIdName];
@@ -152,7 +152,7 @@ CollectionDriver.prototype.upsert = function(collectionName, obj, uniqueIdName, 
         							queryObject,
         							{},
         							obj,
-        							{new:true, upsert:true},
+        							{new:false, upsert:true},
         							function(error,doc) 
         								{ 
             								if (error) 
@@ -200,10 +200,14 @@ CollectionDriver.prototype.upsert = function(collectionName, obj, uniqueIdName, 
 
 //delete a specific object
 CollectionDriver.prototype.delete = function(collectionName, entityId, callback) {
+    console.log('collectionName = ' + collectionName);
+    console.log('entityId = ' + entityId);
+
+
     this.getCollection(collectionName, function(error, the_collection) { 
         if (error) callback(error)
         else {
-            the_collection.remove({'_id':ObjectID(entityId)}, function(error,doc) { 
+            the_collection.remove({'_id':entityId}, function(error,doc) { 
             	if (error) callback(error)
             	else callback(null, doc);
             });

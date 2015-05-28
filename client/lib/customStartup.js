@@ -20,17 +20,8 @@ Meteor.startup(function() {
         }
         else
         {
-
-    	    var d = new Date().getTime();
-        	var appUUID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) 
-            {
-                var r = (d + Math.random()*16)%16 | 0;
-                d = Math.floor(d/16);
-                return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-        	});
-            
-        	Session.setPersistent('appUUID', appUUID);
-        	console.log(appUUID + ":Startup: New appUUID stored in local storage = " + uuid);
+        	Session.setPersistent('appUUID', Meteor.uuid());
+        	console.log(appUUID + ":Startup: New appUUID stored in local storage = " + Session.get('appUUID'));
 
         }
 

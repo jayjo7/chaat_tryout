@@ -18,9 +18,9 @@ Meteor.methods({
         switch (whoReceiving)
         {
 
-          case 'client':
+          case CLIENT:
 
-          case 'webmaster':
+          case WEBMASTER:
 
                 body      = 'New Order[' + order.OrderNumber + '] \n';
                 body     += order.Items + '\n';
@@ -75,13 +75,47 @@ Meteor.methods({
 
 
 
-    smsOrderReady:function (order)
+    smsOrderReady:function (sessionId, order, toPhoneNumber, whoReceiving)
     {
-         client = Meteor.npmRequire('twilio')(twilioAccountSID(order.orgname), twilioAuthToken (order.orgname));
-         var body = 'Order[' +order.OrderNumber + '] is ready - DosaHouse \n' + ORDER_STATUS_URL + order.UniqueId;
-         sendSMS (  order.OrderNumber,
-                    order.CustomerPhone, 
-                    body);
+        client                = Meteor.npmRequire('twilio')(twilioAccountSID(order.orgname), twilioAuthToken (order.orgname));
+        var response          = {};
+        CLIENT_NAME           = Meteor.call('getSetting','store_name', order.orgname);
+        var ORDER_STATUS_URL  = Meteor.absoluteUrl('os', {replaceLocalhost:true})+ "/";
+        var body = 'Order[' +order.OrderNumber + '] is ready - ' + CLIENT_NAME + '\n' + ORDER_STATUS_URL + order.UniqueId;
+
+        console.log(sessionId + ': smsOrderReady: ORDER_STATUS_URL = ' +ORDER_STATUS_URL);   
+
+        try{
+          var result = sendSMS (  
+                    sessionId,
+                    order.OrderNumber,
+                    toPhoneNumber, 
+                    body,
+                    order.orgname
+                  );
+
+         response.result = result;
+
+        for(var key in response.result)
+        {
+              console.log(sessionId +": smsOrderReady : " +key + ' = ' + response.result[key]);
+              //smsCustomer[key] = response.result[key];
+        }
+
+        }catch(e)
+        {
+
+          console.log(sessionId +': smsOrderReady : Trouble sending sms to the customer ' + e);
+          var result      = {};
+          result.status   = STATUS_FATAL;
+          result.error    = e.toString();
+          response.result = result;
+
+        }
+
+        return response;
+
+
 
     }
 
