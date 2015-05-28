@@ -56,7 +56,7 @@ if(Meteor.isServer) {
 							}
 
 							try{
-						   		CollectionDriver.prototype.upsert(key, data[i], UNIQUE_ID_NAME, ORG_KEY_NAME , function(err, previousDoc){
+						   		CollectionDriver.prototype.upsert(key, data[i], UNIQUE_ID_NAME, ORG_KEY_NAME , Meteor.bindEnvironment(function(err, doc){
 
 						   			if (err) 
           							{ 
@@ -67,8 +67,9 @@ if(Meteor.isServer) {
           							{
           									result.action 		= 'upsert';
 											result.receiveddata =  data[i];
+											Meteor.call('sendReadyNotification', sessionid, doc);
           							}	
-						   		});
+						   		}));
 						   	}catch(e)
 						   	{
 						   		result.status 		=  STATUS_FAILED;

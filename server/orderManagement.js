@@ -7,11 +7,12 @@ Meteor.methods({
 		var ordersMeta = OrdersMeta.findOne({UniqueId:doc.UniqueId, orgname:doc.orgname});
 		console.log(sessionid +':sendReadyNotification: ordersMeta.UniqueId = ' + ordersMeta.UniqueId);
 
-		if( ! ordersMeta.readyNotificationStatus || 
+		if( doc.StatusCode === STATE_CODE_THREE
+			&&(! ordersMeta.readyNotificationStatus || 
 			  (
 			  	ordersMeta.readyNotificationStatus.email.emailCustomer.status !== STATUS_SUCCESS &&
 			  	ordersMeta.readyNotificationStatus.sms.smsCustomer.status     !== STATUS_SUCCESS
-			  )
+			  ))
 		  )
 		{
 
