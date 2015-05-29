@@ -241,9 +241,14 @@ isPaymentBrainTree	 = function(orgname)
     }
 }
 
-gmtOffset              = function(orgname)
+gmtOffset  	= function(orgname)
 {
     return  Meteor.settings.public[orgname]. gmtOffset;
+}
+
+countryCode =  function(orgname)
+{
+	return  Meteor.settings.public[orgname]. countryCode;
 }
 
 

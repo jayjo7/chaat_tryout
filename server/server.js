@@ -98,7 +98,7 @@ Meteor.methods({
 
 	},
 
-	orderItems:function(sessionId, contactInfo, sequence, orgname, cardToken, callback)
+	orderItems: function(sessionId, contactInfo, sequence, orgname, cardToken, callback)
 	{
 
 			console.log(sessionId + ' :In OrderItems');
