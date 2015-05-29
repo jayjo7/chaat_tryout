@@ -377,8 +377,8 @@ OrdersMeta.after.insert(function (userId, doc) {
 	  		else
 	  		{
 	  			processStatus.websheets.response  = response ;
-	  			Orders.update({UniqueId:doc.UniqueId},     {$set: {sheetRowId : response.data.sheetRowId, sheetColumnId:response.data.sheetColumnId}});
-				OrdersMeta.update({UniqueId:doc.UniqueId}, {$set: {sheetRowId : response.data.sheetRowId, sheetColumnId:response.data.sheetColumnId}});
+	  			Orders.update({UniqueId:doc.UniqueId},     {$set: {sheetRowId : response.data.sheetRowId}});
+				OrdersMeta.update({UniqueId:doc.UniqueId}, {$set: {sheetRowId : response.data.sheetRowId}});
 	  		}
 	 }catch(e)
 	 {

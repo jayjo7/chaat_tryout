@@ -67,7 +67,10 @@ if(Meteor.isServer) {
           							{
           									result.action 		= 'upsert';
 											result.receiveddata =  data[i];
-											Meteor.call('sendReadyNotification', sessionid, doc);
+											if( ORDERS === key.toUpperCase())
+											{
+												Meteor.call('sendReadyNotification', sessionid, doc);
+											}
           							}	
 						   		}));
 						   	}catch(e)
@@ -229,7 +232,10 @@ if(Meteor.isServer) {
           							    {
           									result.action 		= 'upsert';
 											result.receiveddata =  data[i];
-											Meteor.call('sendReadyNotification', sessionid, doc);
+											if( ORDERS === key.toUpperCase())
+											{
+												Meteor.call('sendReadyNotification', sessionid, doc);
+											}
           							    }
 				     			}));
 							}

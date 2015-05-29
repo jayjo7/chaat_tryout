@@ -215,7 +215,7 @@ Meteor.methods({
 					}
 					else
 					{
-						console.log(sessionid + ': Either the order is not ready are notifciation is already sent (Order Number = ' + doc.OrderNumber +')')
+						console.log(sessionid + ': Ready notifciation is already sent ( Order Number = ' + doc.OrderNumber +' )')
 					}
 
 				}catch(e)
@@ -229,7 +229,7 @@ Meteor.methods({
 			}
 			else
 			{
-				console.log(sessionid + ': StatusCode is not ready, ignoring (Order Number = ' + doc.OrderNumber +', StatusCode = ' + doc.StatusCode +')' );
+				console.log(sessionid + ': StatusCode is not ready, ignoring ( Order Number = ' + doc.OrderNumber +', StatusCode = ' + doc.StatusCode +' )' );
 
 			}
 
