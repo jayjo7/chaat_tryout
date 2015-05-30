@@ -1,49 +1,55 @@
 <template name="digitalMenu">
 
-<div class="digitalMenu" >
+<div class="tv-body" >
 
-<div class="tvcontainer"> 
+<div class="tv-OverallContainer">	
+
+<div class="tv-MainHeader">
+    <div class="tv-MainHeaderLeft" align="left">{{getSettings 'dm_left_message'}}</div>
+    <div class="tv-MainHeaderCenter" align="center">
+
+    	Welcome to <br/>Chowpaaty Chaat
+
+    </div>
+    <div class="tv-MainHeaderRight" align="right">Order Online!<br/> Pick it up here!<br/>
+    www.chowpaatychaat.com</div>
+    <div class="TV-notification">{{newOrderCount}}</div>
+  </div>
+  <hr>
+
+
   <!--MENU--> 
 
    {{#each getSettingsMulti "category_menu"}}
 
    		{{#if isMenuAvailable Value}}	
 
+
   <!--CATEGORY-->
-			  <div class="cat-container">
-			    <div class="text-center text-uppercase">
-			      <div class="imgheader "> <img class="img-circle menucircle " src="https://efmxurehx9yw.firesize.com/300x200/g_center/http://indipin.com/wp-content/uploads/2015/01/best-cities-in-india-to-try-the-sweetest-delicacies-tripoto-14219445758k4ng.jpg">
-			        <h1 class="menuimg-text">{{Value}}</h1>
-			        <h1 class="menuimg-text2">{{Value}}</h1>
-			      </div>
-			    </div>
-			    <div class="items-block">
+		<div class="tv-CategoryBlock">
+            <div class="tv-CategoryHeader" align="center">
+            	<div class="tv-category-title">{{Value}}</div>
+            </div>
 
 			    		{{#each menuMulti Value }}
 
-			    			{{#if isToSell fontStyle}}  
+ 
+			    					<div class="tv-itemBlock ">
 
-
-
-								      <div class="lineitem {{soldOut fontLine}}">
-								        <div class="item pull-left">{{Name}}</div>
-
-								             {{#if isSpecial fontWeight}}
-								             	<div class="special">special</div>
+			    						        <div class="tv-item-Title" >{{Name}}</div>
+			    						      {{#if isSpecial fontWeight}}
+        										<div class="tv-special">Special</div>
 								             {{/if}}
-
-								        <div class="price pull-right text-center">{{currency Charge}}</div>
-								      </div>
-
+        										<div align="center" class="tv-item-Price"> {{currency Charge}}</div>
+      								</div>
 
 
 
-						    {{/if}}  
 
 
 			      		{{/each}}
 			     </div>
-			  </div>
+			 
 			  <!--//CATEGORY--> 
 
 
@@ -55,6 +61,7 @@
   <!--//MENU--> 
   
 </div>
+<div align="center" class="tv-item-Title" style="font-color:white">Powered by Websheets&#8482;</div>
 </div>
 
 

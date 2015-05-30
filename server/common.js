@@ -288,6 +288,33 @@ orgCurrencyCode       = function(orgname)
                             return  Meteor.settings.public[orgname].currencyCode;
                         }; 
 
+statusDescription = function (StatusCode) 
+{
+  switch (StatusCode)
+  {
+      case STATE_CODE_ONE:
+
+          return STATE_ONE;
+          break;
+
+      case STATE_CODE_TWO:
+
+          return STATE_TWO;
+          break;
+
+      case STATE_CODE_THREE:
+
+          return STATE_THREE;
+          break;
+
+      case STATE_CODE_FOUR:
+
+          return STATE_FOUR;
+        break;
+  }
+
+}                       
+
 Meteor.methods({
 
   getSetting:function(key, orgname)

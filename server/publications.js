@@ -37,12 +37,25 @@ Meteor.publish('ordereditems', function(UniqueId, orgname)
 	return  OrderedItems.find({UniqueId: UniqueId, orgname:orgname });
 
 });	
-	
+
+Meteor.publish('ordereditemsManagement', function( orgname)
+{
+ 
+	return  OrderedItems.find({ orgname:orgname });
+
+});	
 	
 Meteor.publish('orders', function(UniqueId,orgname)
 {
 
 	return Orders.find({UniqueId: UniqueId, orgname:orgname});
+
+});	
+
+Meteor.publish('orderManagement', function(orgname)
+{
+
+	return Orders.find({ orgname:orgname});
 
 });	
 

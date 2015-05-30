@@ -1,0 +1,58 @@
+<template name="orderManagement">
+
+<div class="kitchencontainer">
+
+  <div class="kitchennew">
+
+    <div align="center" class="kitchenorderheader">NEW</div>
+
+    {{#each getOrders 1 }}
+
+    <div class="kitchenorders">
+      <div align="center" class="kitchenorderheader">{{OrderNumber}}</div>
+      <ul>
+          {{Items}}
+          <li style="background-color:red; color:yellow">{{MessageToKitchen}}</li>
+          <br>
+            <button id='moveOrderStatus' type="button" class="btn btn-warning">Move to In-Kitchen</button>
+      </ul>
+    </div>
+
+    {{/each}}
+
+
+  </div>
+
+
+  <div class="kitcheninkitchen">
+    <div align="center" class="kitchenorderheader">IN KITCHEN</div>
+    {{#each getOrders 2 }}
+
+
+    <div class="kitchenorders">
+      <div align="center" class="kitchenorderheader">{{OrderNumber}}</div>
+      <ul>
+            {{Items}}
+         <li style="background-color:red; color:yellow">{{MessageToKitchen}}</li>
+         <br>
+          <button id='moveOrderStatus' type="button" class="btn btn-info">Move to Ready</button>
+      </ul>
+    </div>
+    {{/each}}
+
+  </div>
+
+
+  <div class="kitchenready">
+    <div align="center" class="kitchenorderheader">Ready</div>
+    {{#each getOrders 3}}
+    <div class="kitchenorders">
+      <div align="center" class="kitchenorderheader">{{OrderNumber}}</div>
+    </div>
+    {{/each}}
+
+  </div>
+</div>
+
+
+</template>

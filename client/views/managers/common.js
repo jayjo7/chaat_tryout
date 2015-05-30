@@ -1,3 +1,21 @@
+Template.registerHelper('newOrderCount', function()
+{
+	var orgname = Session.get(ORG_NAME_SESSION_KEY);
+
+	return  Orders.find({orgname:orgname, StatusCode: 1}).count();
+
+});
+
+Template.registerHelper('getOrders', function(StatusCode)
+{
+	var orgname = Session.get(ORG_NAME_SESSION_KEY);
+
+	console.log('getOrders:StatusCode = ' +StatusCode);
+	return  Orders.find({orgname:orgname,StatusCode: StatusCode});
+
+});
+
+
 Template.registerHelper('getSettings', function(key)
 {
 	var orgname = Session.get(ORG_NAME_SESSION_KEY);

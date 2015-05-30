@@ -92,11 +92,13 @@ Meteor.methods({
    	
 	},
 
-	updateOrderStatus: function(sessionId, orgname, UniqueId, statusCode)
+	updateOrderStatus: function(sessionId, orgname, OrderNumber, UniqueId, toStatusCode)
 	{
-
+		console.log(sessionId + ': update order status: orgname = ' + orgname + ' orderNumber = ' + OrderNumber + ' : UniqueId = ' + UniqueId + ': toStatusCode = ' + toStatusCode);
+		Orders.update ({orgname:orgname, UniqueId: UniqueId, OrderNumber:OrderNumber },{$set: {StatusCode: toStatusCode, Status:statusDescription(toStatusCode)}} );
 
 	},
+
 
 	orderItems: function(sessionId, contactInfo, sequence, orgname, cardToken, callback)
 	{
@@ -277,6 +279,60 @@ Meteor.methods({
 	}
 });
 
+
+Orders.after.update (function (userId, doc, fieldNames, modifier, options) 
+{
+  // this.previous  --- Will contain the doc previous to update, if previous doc is needed update the fetchPrevious: true
+
+   console.log('Orders.after.update:userId     = ' + userId);
+   console.log('Orders.after.update:doc        = ' + JSON.stringify(doc, null, 4));
+   console.log('Orders.after.update:fieldNames = ' + JSON.stringify(fieldNames, null, 4));
+   console.log('Orders.after.update:modifier   = ' + JSON.stringify(modifier, null, 4));
+   console.log('Orders.after.update:options    = ' + JSON.stringify(options, null, 4));
+
+   doc.Operation = 'Update';
+    var orderUpdateStatus	= 	{
+  						   		'websheets'	:{},
+
+  							};
+
+
+   	try{
+	  		var count = 0;
+	  		orderUpdateStatus.websheets.status 	= STATUS_SUCCESS;
+	  		var response;
+	  		do
+	  		{
+	  			count +=1;
+	  			response = Meteor.call('postWebsheets', doc);
+	  			console.log(doc.sessionId + ": attempted count = " + count );
+	  		}while (count < WEBSHEETS_MAX_RETRY && response.statusCode !== 200)
+
+	  		if(response.statusCode !== 200)
+	  		{
+	  			console.log(doc.sessionId + ": Jay Todo: Send Email Notification to Webmaster and Owner");
+	  			orderUpdateStatus.websheets.status 	= STATUS_FAILED;
+	  		}
+	  		else
+	  		{
+	  			orderUpdateStatus.websheets.response  = response ;
+	  			Orders.update({UniqueId:doc.UniqueId},     {$set: {sheetRowId : response.data.sheetRowId}});
+				OrdersMeta.update({UniqueId:doc.UniqueId}, {$set: {sheetRowId : response.data.sheetRowId}});
+	  		}
+	 }catch(e)
+	 {
+	  		console.log(doc.sessionId + ": Caught error on updating the order ststus to websheets fatal error.", e);
+	  		console.log(doc.sessionId + ": Jay Todo: Send Email Notification to Webmaster and Owner");
+	  		orderUpdateStatus.websheets.status 	= STATUS_FATAL;
+	  		orderUpdateStatus.websheets.error 	= e.toString();
+
+	 }
+	 console.log(doc.sessionId + ': Order Update Status' +  JSON.stringify(orderUpdateStatus, null, 4))
+	 console.log(doc.sessionId + ': Done updating the order status to websheets');
+
+
+
+}, {fetchPrevious: false});
 
 OrdersMeta.after.insert(function (userId, doc) {
 
